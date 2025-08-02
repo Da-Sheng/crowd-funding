@@ -4,12 +4,13 @@ import React, { useEffect, useState } from "react";
 import { Carousel } from "./components/Carousel";
 import { CreateCrowdfundingModal } from "./components/CreateCrowdfundingModal";
 import { GlobalStyles } from "./components/GlobalStyles";
-// import { ProjectDetailModal } from "./components/ProjectDetailModal";
+// 启用详情弹窗
 import { LatestActivities } from "./components/LatestActivities";
 // 导入组件
 import { Navbar } from "./components/Navbar";
 import { ParticipateModal } from "./components/ParticipateModal";
 import { PopularProjects } from "./components/PopularProjects";
+import { ProjectDetailModal } from "./components/ProjectDetailModal";
 import { formatEther, parseEther } from "viem";
 import { useScaffoldEventHistory, useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
@@ -39,6 +40,7 @@ interface Project {
   creator?: string;
   beneficiary?: string;
   timestamp?: bigint;
+  location?: string; // 添加位置字段
 }
 
 const HomePage = () => {
@@ -46,8 +48,8 @@ const HomePage = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [showParticipateModal, setShowParticipateModal] = useState(false);
-  const [, setShowDetailModal] = useState(false);
-  const [, setSelectedProject] = useState<any>(null);
+  const [showDetailModal, setShowDetailModal] = useState(false); // 启用详情弹窗状态
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null); // 启用选中项目状态
   const [selectedProjectId, setSelectedProjectId] = useState<string>("1");
   const [participateAmount, setParticipateAmount] = useState<string>("0.01");
   const [participateMessage, setParticipateMessage] = useState<string>("支持一下");
@@ -107,6 +109,9 @@ const HomePage = () => {
         creator: event.args?.creator,
         beneficiary: event.args?.beneficiary,
         timestamp: event.args?.timestamp,
+        category: "众筹",
+        daysLeft: Math.max(0, Math.floor((Number(event.args?.timestamp || 0) + 86400 - Date.now() / 1000) / 86400)),
+        location: "项目地址", // 可以从合约事件中获取或设置默认值
       }));
     }
 
@@ -121,6 +126,9 @@ const HomePage = () => {
         creator: "",
         target: 80000,
         supporters: 234,
+        category: "教育",
+        daysLeft: 15,
+        location: "云南省大理市",
       },
       {
         id: 2,
@@ -132,6 +140,9 @@ const HomePage = () => {
         creator: "",
         target: 200000,
         supporters: 456,
+        category: "公益",
+        daysLeft: 23,
+        location: "北京市朝阳区",
       },
       {
         id: 3,
@@ -143,6 +154,9 @@ const HomePage = () => {
         creator: "",
         target: 150000,
         supporters: 189,
+        category: "教育",
+        daysLeft: 30,
+        location: "四川省凉山州",
       },
     ];
   }, [crowdfundingCreatedEvents]);
@@ -171,6 +185,7 @@ const HomePage = () => {
           creator: event.args?.creator,
           beneficiary: event.args?.beneficiary,
           timestamp: event.args?.timestamp,
+          location: "项目地址", // 可以从合约中获取
         };
       });
     }
@@ -188,6 +203,7 @@ const HomePage = () => {
         creator: "",
         category: "医疗",
         daysLeft: 15,
+        location: "上海市浦东新区",
       },
       {
         id: 2,
@@ -201,6 +217,7 @@ const HomePage = () => {
         supporters: 567,
         category: "救灾",
         daysLeft: 8,
+        location: "河南省郑州市",
       },
       {
         id: 3,
@@ -214,6 +231,7 @@ const HomePage = () => {
         supporters: 198,
         category: "环保",
         daysLeft: 22,
+        location: "内蒙古阿拉善盟",
       },
       {
         id: 4,
@@ -227,6 +245,7 @@ const HomePage = () => {
         supporters: 267,
         category: "创新",
         daysLeft: 30,
+        location: "深圳市南山区",
       },
     ];
   }, [crowdfundingCreatedEvents, crowdfundingParticipatedEvents]);
@@ -406,9 +425,19 @@ const HomePage = () => {
         onSubmit={handleParticipateInCrowdfunding}
         isParticipating={isParticipating}
       />
+
+      {/* 项目详情弹窗 */}
+      <ProjectDetailModal
+        project={selectedProject}
+        isOpen={showDetailModal}
+        onClose={() => setShowDetailModal(false)}
+        onSupportClick={handleSupportClick}
+      />
+
       {/* 全局样式 */}
       <GlobalStyles />
     </div>
   );
 };
+
 export default HomePage;
