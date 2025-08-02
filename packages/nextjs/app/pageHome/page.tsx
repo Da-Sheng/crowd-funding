@@ -92,7 +92,6 @@ const HomePage = () => {
     eventName: "CrowdfundingParticipated",
     watch: true,
   });
-
   // 轮播图数据处理
   const slides = React.useMemo(() => {
     if (crowdfundingCreatedEvents && crowdfundingCreatedEvents.length > 0) {
@@ -113,7 +112,7 @@ const HomePage = () => {
           ).length || 0;
 
         // 获取图片URL，如果没有则使用默认图片
-        const imageUrl = `https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80`;
+        // const imageUrl = `https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80`;
         // event.args?.imageUrl ||
         // `https://images.unsplash.com/photo-${1503676260728 + index}?w=800&h=400&fit=crop&crop=entropy&auto=format&q=80`;
 
@@ -121,7 +120,7 @@ const HomePage = () => {
           id: Number(event.args?.crowdfundingId || index + 1),
           title: event.args?.title || `众筹项目 #${event.args?.crowdfundingId}`,
           description: event.args?.description || "正在筹集资金的项目",
-          image: imageUrl,
+          // image: imageUrl,
           raised: totalRaised, // 使用计算出的真实筹款金额
           target: event.args?.targetAmount ? Number(formatEther(event.args.targetAmount)) : 100,
           supporters: supportersCount, // 使用计算出的真实支持人数
@@ -189,15 +188,15 @@ const HomePage = () => {
             }, 0) || 0;
 
         // 获取图片URL，如果没有则使用默认图片
-        const imageUrl =
-          event.args?.imageUrl ||
-          `https://images.unsplash.com/photo-${1559757148 + index * 1000}?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80`;
+        // const imageUrl =
+        //   event.args?.imageUrl ||
+        //   `https://images.unsplash.com/photo-${1559757148 + index * 1000}?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80`;
 
         return {
           id: Number(event.args?.crowdfundingId || index + 1),
           title: event.args?.title || `项目 #${event.args?.crowdfundingId}`,
           description: event.args?.description || "众筹项目描述",
-          image: imageUrl,
+          // image: imageUrl,
           raised: totalRaised, // 使用计算出的真实筹款金额
           target: event.args?.targetAmount ? Number(formatEther(event.args.targetAmount)) : 100,
           supporters: participatedCount, // 使用计算出的真实参与人数
@@ -406,6 +405,7 @@ const HomePage = () => {
 
       {/* 轮播图区域 */}
       <Carousel
+        // @ts-ignore
         slides={slides}
         currentSlide={currentSlide}
         onNext={nextSlide}
@@ -416,6 +416,7 @@ const HomePage = () => {
 
       {/* 热门项目区域 */}
       <PopularProjects
+        // @ts-ignore
         projects={popularProjects}
         onSupportClick={handleSupportClick}
         onViewDetails={handleViewDetails}

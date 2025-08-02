@@ -58,17 +58,29 @@ const CrowdfundingPage = () => {
   });
 
   // 监听众筹创建事件
-  const { data: crowdfundingCreatedEvents } = useScaffoldEventHistory({
+  const {
+    data: crowdfundingCreatedEvents,
+    isLoading: isLoadingCreatedEvents,
+    error: createdEventsError,
+  } = useScaffoldEventHistory({
     contractName: "Crowdfunding",
     eventName: "CrowdfundingCreated",
-    watch: true,
+    watch: false, // 关闭实时监听，减少请求
+    fromBlock: -1000n, // 只查询最近1000个区块
+    blocksBatchSize: 100, // 减小批次大小
   });
 
   // 监听众筹参与事件
-  const { data: crowdfundingParticipatedEvents } = useScaffoldEventHistory({
+  const {
+    data: crowdfundingParticipatedEvents,
+    isLoading: isLoadingParticipatedEvents,
+    error: participatedEventsError,
+  } = useScaffoldEventHistory({
     contractName: "Crowdfunding",
     eventName: "CrowdfundingParticipated",
-    watch: true,
+    watch: false, // 关闭实时监听，减少请求
+    fromBlock: -1000n, // 只查询最近1000个区块
+    blocksBatchSize: 100, // 减小批次大小
   });
 
   // 设置当前用户地址为受益人
@@ -370,7 +382,11 @@ const CrowdfundingPage = () => {
 
         <div className="mb-6">
           <h3 className="text-lg font-medium mb-2">众筹创建事件</h3>
-          {crowdfundingCreatedEvents && crowdfundingCreatedEvents.length > 0 ? (
+          {isLoadingCreatedEvents ? (
+            <p className="text-center py-4">加载众筹创建事件中...</p>
+          ) : createdEventsError ? (
+            <p className="text-center py-4 text-red-500">加载众筹创建事件失败: {createdEventsError.message}</p>
+          ) : crowdfundingCreatedEvents && crowdfundingCreatedEvents.length > 0 ? (
             <table className="table w-full">
               <thead>
                 <tr>
@@ -404,7 +420,11 @@ const CrowdfundingPage = () => {
 
         <div>
           <h3 className="text-lg font-medium mb-2">众筹参与事件</h3>
-          {crowdfundingParticipatedEvents && crowdfundingParticipatedEvents.length > 0 ? (
+          {isLoadingParticipatedEvents ? (
+            <p className="text-center py-4">加载众筹参与事件中...</p>
+          ) : participatedEventsError ? (
+            <p className="text-center py-4 text-red-500">加载众筹参与事件失败: {participatedEventsError.message}</p>
+          ) : crowdfundingParticipatedEvents && crowdfundingParticipatedEvents.length > 0 ? (
             <table className="table w-full">
               <thead>
                 <tr>
