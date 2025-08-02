@@ -29,6 +29,10 @@ export const menuLinks: HeaderMenuLink[] = [
     label: "pageHome",
     href: "/pageHome",
   },
+  {
+    label: "Crowdfund",
+    href: "/crowdfunding",
+  },
 ];
 
 export const HeaderMenuLinks = () => {
