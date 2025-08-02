@@ -1,0 +1,1573 @@
+{
+  "address": "0x767e5aCf95e71C55762145fF5B7Af22b882f667a",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_charityAddress",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [],
+      "name": "AccessControlBadConfirmation",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "neededRole",
+          "type": "bytes32"
+        }
+      ],
+      "name": "AccessControlUnauthorizedAccount",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "EnforcedPause",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "ExpectedPause",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "ReentrancyGuardReentrantCall",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "crowdfundingId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "totalAmount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "excessAmount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        }
+      ],
+      "name": "CrowdfundingCompleted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "crowdfundingId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "creator",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "beneficiary",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "targetAmount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "duration",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes",
+          "name": "imageData",
+          "type": "bytes"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        }
+      ],
+      "name": "CrowdfundingCreated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "crowdfundingId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "totalAmount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        }
+      ],
+      "name": "CrowdfundingExpired",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "crowdfundingId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "participant",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "message",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        }
+      ],
+      "name": "CrowdfundingParticipated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "crowdfundingId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "participant",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        }
+      ],
+      "name": "FundsReturned",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "crowdfundingId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "beneficiary",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        }
+      ],
+      "name": "FundsWithdrawn",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "Paused",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "role",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "previousAdminRole",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "newAdminRole",
+          "type": "bytes32"
+        }
+      ],
+      "name": "RoleAdminChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "role",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        }
+      ],
+      "name": "RoleGranted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "role",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        }
+      ],
+      "name": "RoleRevoked",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "crowdfundingId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "rewardAmount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "charityAmount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        }
+      ],
+      "name": "StakingRewardDistributed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "Unpaused",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "ADMIN_ROLE",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "CHARITY_ROLE",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "DEFAULT_ADMIN_ROLE",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "charityAddress",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "charityStaffSalaryBps",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_targetAmount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "_title",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_description",
+          "type": "string"
+        },
+        {
+          "internalType": "bytes",
+          "name": "_imageData",
+          "type": "bytes"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_duration",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "_beneficiary",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "_returnOnExpire",
+          "type": "bool"
+        }
+      ],
+      "name": "createCrowdfunding",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_crowdfundingId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_rewardAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "distributeStakingRewards",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_crowdfundingId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getCrowdfundingInfo",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "id",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "creator",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "beneficiary",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "targetAmount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "currentAmount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "startTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "endTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "duration",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "title",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "description",
+              "type": "string"
+            },
+            {
+              "internalType": "bytes",
+              "name": "imageData",
+              "type": "bytes"
+            },
+            {
+              "internalType": "enum ICrowdfunding.CrowdfundingStatus",
+              "name": "status",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint256",
+              "name": "excessAmount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "bool",
+              "name": "isCompleted",
+              "type": "bool"
+            },
+            {
+              "internalType": "bool",
+              "name": "isStaking",
+              "type": "bool"
+            },
+            {
+              "internalType": "bool",
+              "name": "returnOnExpire",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct ICrowdfunding.Crowdfunding",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_crowdfundingId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getParticipationRecords",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "participant",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "message",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "timestamp",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct ICrowdfunding.Participation[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "role",
+          "type": "bytes32"
+        }
+      ],
+      "name": "getRoleAdmin",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_crowdfundingId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "_participant",
+          "type": "address"
+        }
+      ],
+      "name": "getUserContribution",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "role",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "grantRole",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "role",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "hasRole",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_crowdfundingId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "_message",
+          "type": "string"
+        }
+      ],
+      "name": "participateInCrowdfunding",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "pause",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "paused",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "role",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "address",
+          "name": "callerConfirmation",
+          "type": "address"
+        }
+      ],
+      "name": "renounceRole",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_crowdfundingId",
+          "type": "uint256"
+        }
+      ],
+      "name": "returnFunds",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "role",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "revokeRole",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_charityAddress",
+          "type": "address"
+        }
+      ],
+      "name": "setCharityAddress",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_charityStaffSalaryBps",
+          "type": "uint256"
+        }
+      ],
+      "name": "setCharityStaffSalaryBps",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_crowdfundingId",
+          "type": "uint256"
+        }
+      ],
+      "name": "stakeExcessFunds",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes4",
+          "name": "interfaceId",
+          "type": "bytes4"
+        }
+      ],
+      "name": "supportsInterface",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_crowdfundingId",
+          "type": "uint256"
+        }
+      ],
+      "name": "transferExpiredFundsToCharity",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "unpause",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_crowdfundingId",
+          "type": "uint256"
+        }
+      ],
+      "name": "withdrawFunds",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "stateMutability": "payable",
+      "type": "receive"
+    }
+  ],
+  "transactionHash": "0x848b444cb1a6946b188954d3b7f1a4ea41c0f5adaab7e619fa0c21ff92e96dcc",
+  "receipt": {
+    "to": null,
+    "from": "0x49916C1fff5d56FA7B8c17c2e71cCB4Ed0c892e4",
+    "contractAddress": "0x767e5aCf95e71C55762145fF5B7Af22b882f667a",
+    "transactionIndex": 10,
+    "gasUsed": "2345629",
+    "logsBloom": "0x00000004000000000000000000000000000000000000000000000000000000000000000000100000000000200000000000000000000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000020020000000000000000000800000000000000006800000000000000000000000000000000080000000000004000000000000000000000000000000000000000000000000000002000800000000000000000000000001000000000000001000000000000000000000000000000000000000000000100000000000020000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0x95f094ef0d25457b63785658c9ab7e8011ae4d3bebcc541d4f316d4c01183df3",
+    "transactionHash": "0x848b444cb1a6946b188954d3b7f1a4ea41c0f5adaab7e619fa0c21ff92e96dcc",
+    "logs": [
+      {
+        "transactionIndex": 10,
+        "blockNumber": 28926336,
+        "transactionHash": "0x848b444cb1a6946b188954d3b7f1a4ea41c0f5adaab7e619fa0c21ff92e96dcc",
+        "address": "0x767e5aCf95e71C55762145fF5B7Af22b882f667a",
+        "topics": [
+          "0x2f8788117e7eff1d82e926ec794901d17c78024a50270940304540a733656f0d",
+          "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "0x00000000000000000000000049916c1fff5d56fa7b8c17c2e71ccb4ed0c892e4",
+          "0x00000000000000000000000049916c1fff5d56fa7b8c17c2e71ccb4ed0c892e4"
+        ],
+        "data": "0x",
+        "logIndex": 15,
+        "blockHash": "0x95f094ef0d25457b63785658c9ab7e8011ae4d3bebcc541d4f316d4c01183df3"
+      },
+      {
+        "transactionIndex": 10,
+        "blockNumber": 28926336,
+        "transactionHash": "0x848b444cb1a6946b188954d3b7f1a4ea41c0f5adaab7e619fa0c21ff92e96dcc",
+        "address": "0x767e5aCf95e71C55762145fF5B7Af22b882f667a",
+        "topics": [
+          "0x2f8788117e7eff1d82e926ec794901d17c78024a50270940304540a733656f0d",
+          "0xa49807205ce4d355092ef5a8a18f56e8913cf4a201fbe287825b095693c21775",
+          "0x00000000000000000000000049916c1fff5d56fa7b8c17c2e71ccb4ed0c892e4",
+          "0x00000000000000000000000049916c1fff5d56fa7b8c17c2e71ccb4ed0c892e4"
+        ],
+        "data": "0x",
+        "logIndex": 16,
+        "blockHash": "0x95f094ef0d25457b63785658c9ab7e8011ae4d3bebcc541d4f316d4c01183df3"
+      },
+      {
+        "transactionIndex": 10,
+        "blockNumber": 28926336,
+        "transactionHash": "0x848b444cb1a6946b188954d3b7f1a4ea41c0f5adaab7e619fa0c21ff92e96dcc",
+        "address": "0x767e5aCf95e71C55762145fF5B7Af22b882f667a",
+        "topics": [
+          "0x2f8788117e7eff1d82e926ec794901d17c78024a50270940304540a733656f0d",
+          "0x838cb9e68162e54d2dfda44baa96273d8a6cb729c0d42995215e0f52841feb77",
+          "0x00000000000000000000000049916c1fff5d56fa7b8c17c2e71ccb4ed0c892e4",
+          "0x00000000000000000000000049916c1fff5d56fa7b8c17c2e71ccb4ed0c892e4"
+        ],
+        "data": "0x",
+        "logIndex": 17,
+        "blockHash": "0x95f094ef0d25457b63785658c9ab7e8011ae4d3bebcc541d4f316d4c01183df3"
+      }
+    ],
+    "blockNumber": 28926336,
+    "cumulativeGasUsed": "3365275",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "0x49916C1fff5d56FA7B8c17c2e71cCB4Ed0c892e4"
+  ],
+  "numDeployments": 1,
+  "solcInputHash": "6b6e9c0ffd0680238c010fff52d0353e",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.20+commit.a1b79de6\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_charityAddress\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"AccessControlBadConfirmation\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"neededRole\",\"type\":\"bytes32\"}],\"name\":\"AccessControlUnauthorizedAccount\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"EnforcedPause\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ExpectedPause\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ReentrancyGuardReentrantCall\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"crowdfundingId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"totalAmount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"excessAmount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"}],\"name\":\"CrowdfundingCompleted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"crowdfundingId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"creator\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"beneficiary\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"targetAmount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"duration\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"title\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"description\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"imageData\",\"type\":\"bytes\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"}],\"name\":\"CrowdfundingCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"crowdfundingId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"totalAmount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"}],\"name\":\"CrowdfundingExpired\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"crowdfundingId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"participant\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"message\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"}],\"name\":\"CrowdfundingParticipated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"crowdfundingId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"participant\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"}],\"name\":\"FundsReturned\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"crowdfundingId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"beneficiary\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"}],\"name\":\"FundsWithdrawn\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"Paused\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"previousAdminRole\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"newAdminRole\",\"type\":\"bytes32\"}],\"name\":\"RoleAdminChanged\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"RoleGranted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"RoleRevoked\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"crowdfundingId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"rewardAmount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"charityAmount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"}],\"name\":\"StakingRewardDistributed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"Unpaused\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"ADMIN_ROLE\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"CHARITY_ROLE\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"DEFAULT_ADMIN_ROLE\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"charityAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"charityStaffSalaryBps\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_targetAmount\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"_title\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"_description\",\"type\":\"string\"},{\"internalType\":\"bytes\",\"name\":\"_imageData\",\"type\":\"bytes\"},{\"internalType\":\"uint256\",\"name\":\"_duration\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_beneficiary\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"_returnOnExpire\",\"type\":\"bool\"}],\"name\":\"createCrowdfunding\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_crowdfundingId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_rewardAmount\",\"type\":\"uint256\"}],\"name\":\"distributeStakingRewards\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_crowdfundingId\",\"type\":\"uint256\"}],\"name\":\"getCrowdfundingInfo\",\"outputs\":[{\"components\":[{\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"creator\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"beneficiary\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"targetAmount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"currentAmount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"startTime\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"endTime\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"duration\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"title\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"description\",\"type\":\"string\"},{\"internalType\":\"bytes\",\"name\":\"imageData\",\"type\":\"bytes\"},{\"internalType\":\"enum ICrowdfunding.CrowdfundingStatus\",\"name\":\"status\",\"type\":\"uint8\"},{\"internalType\":\"uint256\",\"name\":\"excessAmount\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"isCompleted\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"isStaking\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"returnOnExpire\",\"type\":\"bool\"}],\"internalType\":\"struct ICrowdfunding.Crowdfunding\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_crowdfundingId\",\"type\":\"uint256\"}],\"name\":\"getParticipationRecords\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"participant\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"message\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"}],\"internalType\":\"struct ICrowdfunding.Participation[]\",\"name\":\"\",\"type\":\"tuple[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"}],\"name\":\"getRoleAdmin\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_crowdfundingId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_participant\",\"type\":\"address\"}],\"name\":\"getUserContribution\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"grantRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"hasRole\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_crowdfundingId\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"_message\",\"type\":\"string\"}],\"name\":\"participateInCrowdfunding\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"pause\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"paused\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"callerConfirmation\",\"type\":\"address\"}],\"name\":\"renounceRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_crowdfundingId\",\"type\":\"uint256\"}],\"name\":\"returnFunds\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"revokeRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_charityAddress\",\"type\":\"address\"}],\"name\":\"setCharityAddress\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_charityStaffSalaryBps\",\"type\":\"uint256\"}],\"name\":\"setCharityStaffSalaryBps\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_crowdfundingId\",\"type\":\"uint256\"}],\"name\":\"stakeExcessFunds\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes4\",\"name\":\"interfaceId\",\"type\":\"bytes4\"}],\"name\":\"supportsInterface\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_crowdfundingId\",\"type\":\"uint256\"}],\"name\":\"transferExpiredFundsToCharity\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"unpause\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_crowdfundingId\",\"type\":\"uint256\"}],\"name\":\"withdrawFunds\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"stateMutability\":\"payable\",\"type\":\"receive\"}],\"devdoc\":{\"details\":\"\\u4f17\\u7b79\\u5408\\u7ea6\\u5b9e\\u73b0\\uff0c\\u9002\\u7528\\u4e8eMonad\\u533a\\u5757\\u94fe\\uff0c\\u4f7f\\u7528\\u539f\\u751fMON\\u4ee3\\u5e01 \\u7b80\\u5316\\u7248\\u672c\\uff0c\\u4e0d\\u5305\\u542b\\u4ee3\\u7406\\u6a21\\u5f0f\\u76f8\\u5173\\u4ee3\\u7801\",\"errors\":{\"AccessControlBadConfirmation()\":[{\"details\":\"The caller of a function is not the expected one. NOTE: Don't confuse with {AccessControlUnauthorizedAccount}.\"}],\"AccessControlUnauthorizedAccount(address,bytes32)\":[{\"details\":\"The `account` is missing a role.\"}],\"EnforcedPause()\":[{\"details\":\"The operation failed because the contract is paused.\"}],\"ExpectedPause()\":[{\"details\":\"The operation failed because the contract is not paused.\"}],\"ReentrancyGuardReentrantCall()\":[{\"details\":\"Unauthorized reentrant call.\"}]},\"events\":{\"CrowdfundingCompleted(uint256,uint256,uint256,uint256)\":{\"details\":\"\\u4f17\\u7b79\\u5b8c\\u6210\\u4e8b\\u4ef6\"},\"CrowdfundingCreated(uint256,address,address,uint256,uint256,string,string,bytes,uint256)\":{\"details\":\"\\u4f17\\u7b79\\u521b\\u5efa\\u4e8b\\u4ef6\"},\"CrowdfundingExpired(uint256,uint256,uint256)\":{\"details\":\"\\u4f17\\u7b79\\u8fc7\\u671f\\u4e8b\\u4ef6\"},\"CrowdfundingParticipated(uint256,address,uint256,string,uint256)\":{\"details\":\"\\u4f17\\u7b79\\u53c2\\u4e0e\\u4e8b\\u4ef6\"},\"FundsReturned(uint256,address,uint256,uint256)\":{\"details\":\"\\u8d44\\u91d1\\u9000\\u56de\\u4e8b\\u4ef6\"},\"FundsWithdrawn(uint256,address,uint256,uint256)\":{\"details\":\"\\u8d44\\u91d1\\u63d0\\u53d6\\u4e8b\\u4ef6\"},\"Paused(address)\":{\"details\":\"Emitted when the pause is triggered by `account`.\"},\"RoleAdminChanged(bytes32,bytes32,bytes32)\":{\"details\":\"Emitted when `newAdminRole` is set as ``role``'s admin role, replacing `previousAdminRole` `DEFAULT_ADMIN_ROLE` is the starting admin for all roles, despite {RoleAdminChanged} not being emitted to signal this.\"},\"RoleGranted(bytes32,address,address)\":{\"details\":\"Emitted when `account` is granted `role`. `sender` is the account that originated the contract call. This account bears the admin role (for the granted role). Expected in cases where the role was granted using the internal {AccessControl-_grantRole}.\"},\"RoleRevoked(bytes32,address,address)\":{\"details\":\"Emitted when `account` is revoked `role`. `sender` is the account that originated the contract call:   - if using `revokeRole`, it is the admin role bearer   - if using `renounceRole`, it is the role bearer (i.e. `account`)\"},\"StakingRewardDistributed(uint256,uint256,uint256,uint256)\":{\"details\":\"\\u8d28\\u62bc\\u6536\\u76ca\\u4e8b\\u4ef6\"},\"Unpaused(address)\":{\"details\":\"Emitted when the pause is lifted by `account`.\"}},\"kind\":\"dev\",\"methods\":{\"constructor\":{\"details\":\"\\u6784\\u9020\\u51fd\\u6570\",\"params\":{\"_charityAddress\":\"\\u6148\\u5584\\u5730\\u5740\"}},\"createCrowdfunding(uint256,string,string,bytes,uint256,address,bool)\":{\"details\":\"\\u521b\\u5efa\\u4f17\\u7b79\",\"params\":{\"_beneficiary\":\"\\u53d7\\u76ca\\u4eba\\u5730\\u5740\",\"_description\":\"\\u63cf\\u8ff0\",\"_duration\":\"\\u6301\\u7eed\\u65f6\\u95f4\\uff08\\u79d2\\uff09\",\"_imageData\":\"\\u56fe\\u7247\\u6570\\u636e\",\"_returnOnExpire\":\"\\u8fc7\\u671f\\u662f\\u5426\\u9000\\u56de\\u8d44\\u91d1\",\"_targetAmount\":\"\\u76ee\\u6807\\u91d1\\u989d\",\"_title\":\"\\u6807\\u9898\"},\"returns\":{\"_0\":\"crowdfundingId \\u4f17\\u7b79ID\"}},\"distributeStakingRewards(uint256,uint256)\":{\"details\":\"\\u5206\\u914d\\u8d28\\u62bc\\u6536\\u76ca\\uff08\\u7ba1\\u7406\\u5458\\u8c03\\u7528\\uff09\",\"params\":{\"_crowdfundingId\":\"\\u4f17\\u7b79ID\",\"_rewardAmount\":\"\\u6536\\u76ca\\u91d1\\u989d \\u6ce8\\u610f\\uff1a\\u6536\\u76ca\\u91d1\\u989d\\u901a\\u8fc7msg.value\\u4f20\\u5165\\uff0c\\u4f7f\\u7528\\u539f\\u751fMON\\u4ee3\\u5e01\"}},\"getCrowdfundingInfo(uint256)\":{\"details\":\"\\u83b7\\u53d6\\u4f17\\u7b79\\u4fe1\\u606f\",\"params\":{\"_crowdfundingId\":\"\\u4f17\\u7b79ID\"},\"returns\":{\"_0\":\"\\u4f17\\u7b79\\u4fe1\\u606f\"}},\"getParticipationRecords(uint256)\":{\"details\":\"\\u83b7\\u53d6\\u53c2\\u4e0e\\u8bb0\\u5f55\",\"params\":{\"_crowdfundingId\":\"\\u4f17\\u7b79ID\"},\"returns\":{\"_0\":\"\\u53c2\\u4e0e\\u8bb0\\u5f55\\u6570\\u7ec4\"}},\"getRoleAdmin(bytes32)\":{\"details\":\"Returns the admin role that controls `role`. See {grantRole} and {revokeRole}. To change a role's admin, use {_setRoleAdmin}.\"},\"getUserContribution(uint256,address)\":{\"details\":\"\\u83b7\\u53d6\\u7528\\u6237\\u5728\\u7279\\u5b9a\\u4f17\\u7b79\\u4e2d\\u7684\\u53c2\\u4e0e\\u91d1\\u989d\",\"params\":{\"_crowdfundingId\":\"\\u4f17\\u7b79ID\",\"_participant\":\"\\u53c2\\u4e0e\\u8005\\u5730\\u5740\"},\"returns\":{\"_0\":\"\\u53c2\\u4e0e\\u91d1\\u989d\"}},\"grantRole(bytes32,address)\":{\"details\":\"Grants `role` to `account`. If `account` had not been already granted `role`, emits a {RoleGranted} event. Requirements: - the caller must have ``role``'s admin role. May emit a {RoleGranted} event.\"},\"hasRole(bytes32,address)\":{\"details\":\"Returns `true` if `account` has been granted `role`.\"},\"participateInCrowdfunding(uint256,string)\":{\"details\":\"\\u53c2\\u4e0e\\u4f17\\u7b79\",\"params\":{\"_crowdfundingId\":\"\\u4f17\\u7b79ID\",\"_message\":\"\\u7559\\u8a00 \\u6ce8\\u610f\\uff1a\\u53c2\\u4e0e\\u91d1\\u989d\\u901a\\u8fc7msg.value\\u4f20\\u5165\\uff0c\\u4f7f\\u7528\\u539f\\u751fMON\\u4ee3\\u5e01\"}},\"pause()\":{\"details\":\"\\u6682\\u505c\\u5408\\u7ea6\"},\"paused()\":{\"details\":\"Returns true if the contract is paused, and false otherwise.\"},\"renounceRole(bytes32,address)\":{\"details\":\"Revokes `role` from the calling account. Roles are often managed via {grantRole} and {revokeRole}: this function's purpose is to provide a mechanism for accounts to lose their privileges if they are compromised (such as when a trusted device is misplaced). If the calling account had been revoked `role`, emits a {RoleRevoked} event. Requirements: - the caller must be `callerConfirmation`. May emit a {RoleRevoked} event.\"},\"returnFunds(uint256)\":{\"details\":\"\\u9000\\u56de\\u8d44\\u91d1\\uff08\\u4f17\\u7b79\\u8fc7\\u671f\\u4e14\\u8bbe\\u7f6e\\u4e3a\\u9000\\u56de\\u65f6\\uff0c\\u53c2\\u4e0e\\u8005\\u8c03\\u7528\\uff09\",\"params\":{\"_crowdfundingId\":\"\\u4f17\\u7b79ID\"}},\"revokeRole(bytes32,address)\":{\"details\":\"Revokes `role` from `account`. If `account` had been granted `role`, emits a {RoleRevoked} event. Requirements: - the caller must have ``role``'s admin role. May emit a {RoleRevoked} event.\"},\"setCharityAddress(address)\":{\"details\":\"\\u8bbe\\u7f6e\\u6148\\u5584\\u5730\\u5740\",\"params\":{\"_charityAddress\":\"\\u65b0\\u7684\\u6148\\u5584\\u5730\\u5740\"}},\"setCharityStaffSalaryBps(uint256)\":{\"details\":\"\\u8bbe\\u7f6e\\u6148\\u5584\\u5458\\u5de5\\u5de5\\u8d44\\u6bd4\\u4f8b\",\"params\":{\"_charityStaffSalaryBps\":\"\\u65b0\\u7684\\u6148\\u5584\\u5458\\u5de5\\u5de5\\u8d44\\u6bd4\\u4f8b\"}},\"stakeExcessFunds(uint256)\":{\"details\":\"\\u8d28\\u62bc\\u8d85\\u989d\\u8d44\\u91d1\\uff08\\u7ba1\\u7406\\u5458\\u8c03\\u7528\\uff09\",\"params\":{\"_crowdfundingId\":\"\\u4f17\\u7b79ID\"}},\"supportsInterface(bytes4)\":{\"details\":\"Returns true if this contract implements the interface defined by `interfaceId`. See the corresponding https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[ERC section] to learn more about how these ids are created. This function call must use less than 30 000 gas.\"},\"transferExpiredFundsToCharity(uint256)\":{\"details\":\"\\u5c06\\u8fc7\\u671f\\u4f17\\u7b79\\u8d44\\u91d1\\u8f6c\\u79fb\\u5230\\u6148\\u5584\\u5730\\u5740\\uff08\\u7ba1\\u7406\\u5458\\u8c03\\u7528\\uff09\",\"params\":{\"_crowdfundingId\":\"\\u4f17\\u7b79ID\"}},\"unpause()\":{\"details\":\"\\u6062\\u590d\\u5408\\u7ea6\"},\"withdrawFunds(uint256)\":{\"details\":\"\\u63d0\\u53d6\\u4f17\\u7b79\\u8d44\\u91d1\\uff08\\u53d7\\u76ca\\u4eba\\u8c03\\u7528\\uff09\",\"params\":{\"_crowdfundingId\":\"\\u4f17\\u7b79ID\"}}},\"title\":\"Crowdfunding\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/crowdfunding/Crowdfunding.sol\":\"Crowdfunding\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts/access/AccessControl.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.4.0) (access/AccessControl.sol)\\n\\npragma solidity ^0.8.20;\\n\\nimport {IAccessControl} from \\\"./IAccessControl.sol\\\";\\nimport {Context} from \\\"../utils/Context.sol\\\";\\nimport {IERC165, ERC165} from \\\"../utils/introspection/ERC165.sol\\\";\\n\\n/**\\n * @dev Contract module that allows children to implement role-based access\\n * control mechanisms. This is a lightweight version that doesn't allow enumerating role\\n * members except through off-chain means by accessing the contract event logs. Some\\n * applications may benefit from on-chain enumerability, for those cases see\\n * {AccessControlEnumerable}.\\n *\\n * Roles are referred to by their `bytes32` identifier. These should be exposed\\n * in the external API and be unique. The best way to achieve this is by\\n * using `public constant` hash digests:\\n *\\n * ```solidity\\n * bytes32 public constant MY_ROLE = keccak256(\\\"MY_ROLE\\\");\\n * ```\\n *\\n * Roles can be used to represent a set of permissions. To restrict access to a\\n * function call, use {hasRole}:\\n *\\n * ```solidity\\n * function foo() public {\\n *     require(hasRole(MY_ROLE, msg.sender));\\n *     ...\\n * }\\n * ```\\n *\\n * Roles can be granted and revoked dynamically via the {grantRole} and\\n * {revokeRole} functions. Each role has an associated admin role, and only\\n * accounts that have a role's admin role can call {grantRole} and {revokeRole}.\\n *\\n * By default, the admin role for all roles is `DEFAULT_ADMIN_ROLE`, which means\\n * that only accounts with this role will be able to grant or revoke other\\n * roles. More complex role relationships can be created by using\\n * {_setRoleAdmin}.\\n *\\n * WARNING: The `DEFAULT_ADMIN_ROLE` is also its own admin: it has permission to\\n * grant and revoke this role. Extra precautions should be taken to secure\\n * accounts that have been granted it. We recommend using {AccessControlDefaultAdminRules}\\n * to enforce additional security measures for this role.\\n */\\nabstract contract AccessControl is Context, IAccessControl, ERC165 {\\n    struct RoleData {\\n        mapping(address account => bool) hasRole;\\n        bytes32 adminRole;\\n    }\\n\\n    mapping(bytes32 role => RoleData) private _roles;\\n\\n    bytes32 public constant DEFAULT_ADMIN_ROLE = 0x00;\\n\\n    /**\\n     * @dev Modifier that checks that an account has a specific role. Reverts\\n     * with an {AccessControlUnauthorizedAccount} error including the required role.\\n     */\\n    modifier onlyRole(bytes32 role) {\\n        _checkRole(role);\\n        _;\\n    }\\n\\n    /// @inheritdoc IERC165\\n    function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {\\n        return interfaceId == type(IAccessControl).interfaceId || super.supportsInterface(interfaceId);\\n    }\\n\\n    /**\\n     * @dev Returns `true` if `account` has been granted `role`.\\n     */\\n    function hasRole(bytes32 role, address account) public view virtual returns (bool) {\\n        return _roles[role].hasRole[account];\\n    }\\n\\n    /**\\n     * @dev Reverts with an {AccessControlUnauthorizedAccount} error if `_msgSender()`\\n     * is missing `role`. Overriding this function changes the behavior of the {onlyRole} modifier.\\n     */\\n    function _checkRole(bytes32 role) internal view virtual {\\n        _checkRole(role, _msgSender());\\n    }\\n\\n    /**\\n     * @dev Reverts with an {AccessControlUnauthorizedAccount} error if `account`\\n     * is missing `role`.\\n     */\\n    function _checkRole(bytes32 role, address account) internal view virtual {\\n        if (!hasRole(role, account)) {\\n            revert AccessControlUnauthorizedAccount(account, role);\\n        }\\n    }\\n\\n    /**\\n     * @dev Returns the admin role that controls `role`. See {grantRole} and\\n     * {revokeRole}.\\n     *\\n     * To change a role's admin, use {_setRoleAdmin}.\\n     */\\n    function getRoleAdmin(bytes32 role) public view virtual returns (bytes32) {\\n        return _roles[role].adminRole;\\n    }\\n\\n    /**\\n     * @dev Grants `role` to `account`.\\n     *\\n     * If `account` had not been already granted `role`, emits a {RoleGranted}\\n     * event.\\n     *\\n     * Requirements:\\n     *\\n     * - the caller must have ``role``'s admin role.\\n     *\\n     * May emit a {RoleGranted} event.\\n     */\\n    function grantRole(bytes32 role, address account) public virtual onlyRole(getRoleAdmin(role)) {\\n        _grantRole(role, account);\\n    }\\n\\n    /**\\n     * @dev Revokes `role` from `account`.\\n     *\\n     * If `account` had been granted `role`, emits a {RoleRevoked} event.\\n     *\\n     * Requirements:\\n     *\\n     * - the caller must have ``role``'s admin role.\\n     *\\n     * May emit a {RoleRevoked} event.\\n     */\\n    function revokeRole(bytes32 role, address account) public virtual onlyRole(getRoleAdmin(role)) {\\n        _revokeRole(role, account);\\n    }\\n\\n    /**\\n     * @dev Revokes `role` from the calling account.\\n     *\\n     * Roles are often managed via {grantRole} and {revokeRole}: this function's\\n     * purpose is to provide a mechanism for accounts to lose their privileges\\n     * if they are compromised (such as when a trusted device is misplaced).\\n     *\\n     * If the calling account had been revoked `role`, emits a {RoleRevoked}\\n     * event.\\n     *\\n     * Requirements:\\n     *\\n     * - the caller must be `callerConfirmation`.\\n     *\\n     * May emit a {RoleRevoked} event.\\n     */\\n    function renounceRole(bytes32 role, address callerConfirmation) public virtual {\\n        if (callerConfirmation != _msgSender()) {\\n            revert AccessControlBadConfirmation();\\n        }\\n\\n        _revokeRole(role, callerConfirmation);\\n    }\\n\\n    /**\\n     * @dev Sets `adminRole` as ``role``'s admin role.\\n     *\\n     * Emits a {RoleAdminChanged} event.\\n     */\\n    function _setRoleAdmin(bytes32 role, bytes32 adminRole) internal virtual {\\n        bytes32 previousAdminRole = getRoleAdmin(role);\\n        _roles[role].adminRole = adminRole;\\n        emit RoleAdminChanged(role, previousAdminRole, adminRole);\\n    }\\n\\n    /**\\n     * @dev Attempts to grant `role` to `account` and returns a boolean indicating if `role` was granted.\\n     *\\n     * Internal function without access restriction.\\n     *\\n     * May emit a {RoleGranted} event.\\n     */\\n    function _grantRole(bytes32 role, address account) internal virtual returns (bool) {\\n        if (!hasRole(role, account)) {\\n            _roles[role].hasRole[account] = true;\\n            emit RoleGranted(role, account, _msgSender());\\n            return true;\\n        } else {\\n            return false;\\n        }\\n    }\\n\\n    /**\\n     * @dev Attempts to revoke `role` from `account` and returns a boolean indicating if `role` was revoked.\\n     *\\n     * Internal function without access restriction.\\n     *\\n     * May emit a {RoleRevoked} event.\\n     */\\n    function _revokeRole(bytes32 role, address account) internal virtual returns (bool) {\\n        if (hasRole(role, account)) {\\n            _roles[role].hasRole[account] = false;\\n            emit RoleRevoked(role, account, _msgSender());\\n            return true;\\n        } else {\\n            return false;\\n        }\\n    }\\n}\\n\",\"keccak256\":\"0x1a6b4f6b7798ab80929d491b89d5427a9b3338c0fd1acd0ba325f69c6f1646af\",\"license\":\"MIT\"},\"@openzeppelin/contracts/access/IAccessControl.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.4.0) (access/IAccessControl.sol)\\n\\npragma solidity >=0.8.4;\\n\\n/**\\n * @dev External interface of AccessControl declared to support ERC-165 detection.\\n */\\ninterface IAccessControl {\\n    /**\\n     * @dev The `account` is missing a role.\\n     */\\n    error AccessControlUnauthorizedAccount(address account, bytes32 neededRole);\\n\\n    /**\\n     * @dev The caller of a function is not the expected one.\\n     *\\n     * NOTE: Don't confuse with {AccessControlUnauthorizedAccount}.\\n     */\\n    error AccessControlBadConfirmation();\\n\\n    /**\\n     * @dev Emitted when `newAdminRole` is set as ``role``'s admin role, replacing `previousAdminRole`\\n     *\\n     * `DEFAULT_ADMIN_ROLE` is the starting admin for all roles, despite\\n     * {RoleAdminChanged} not being emitted to signal this.\\n     */\\n    event RoleAdminChanged(bytes32 indexed role, bytes32 indexed previousAdminRole, bytes32 indexed newAdminRole);\\n\\n    /**\\n     * @dev Emitted when `account` is granted `role`.\\n     *\\n     * `sender` is the account that originated the contract call. This account bears the admin role (for the granted role).\\n     * Expected in cases where the role was granted using the internal {AccessControl-_grantRole}.\\n     */\\n    event RoleGranted(bytes32 indexed role, address indexed account, address indexed sender);\\n\\n    /**\\n     * @dev Emitted when `account` is revoked `role`.\\n     *\\n     * `sender` is the account that originated the contract call:\\n     *   - if using `revokeRole`, it is the admin role bearer\\n     *   - if using `renounceRole`, it is the role bearer (i.e. `account`)\\n     */\\n    event RoleRevoked(bytes32 indexed role, address indexed account, address indexed sender);\\n\\n    /**\\n     * @dev Returns `true` if `account` has been granted `role`.\\n     */\\n    function hasRole(bytes32 role, address account) external view returns (bool);\\n\\n    /**\\n     * @dev Returns the admin role that controls `role`. See {grantRole} and\\n     * {revokeRole}.\\n     *\\n     * To change a role's admin, use {AccessControl-_setRoleAdmin}.\\n     */\\n    function getRoleAdmin(bytes32 role) external view returns (bytes32);\\n\\n    /**\\n     * @dev Grants `role` to `account`.\\n     *\\n     * If `account` had not been already granted `role`, emits a {RoleGranted}\\n     * event.\\n     *\\n     * Requirements:\\n     *\\n     * - the caller must have ``role``'s admin role.\\n     */\\n    function grantRole(bytes32 role, address account) external;\\n\\n    /**\\n     * @dev Revokes `role` from `account`.\\n     *\\n     * If `account` had been granted `role`, emits a {RoleRevoked} event.\\n     *\\n     * Requirements:\\n     *\\n     * - the caller must have ``role``'s admin role.\\n     */\\n    function revokeRole(bytes32 role, address account) external;\\n\\n    /**\\n     * @dev Revokes `role` from the calling account.\\n     *\\n     * Roles are often managed via {grantRole} and {revokeRole}: this function's\\n     * purpose is to provide a mechanism for accounts to lose their privileges\\n     * if they are compromised (such as when a trusted device is misplaced).\\n     *\\n     * If the calling account had been granted `role`, emits a {RoleRevoked}\\n     * event.\\n     *\\n     * Requirements:\\n     *\\n     * - the caller must be `callerConfirmation`.\\n     */\\n    function renounceRole(bytes32 role, address callerConfirmation) external;\\n}\\n\",\"keccak256\":\"0xbff9f59c84e5337689161ce7641c0ef8e872d6a7536fbc1f5133f128887aba3c\",\"license\":\"MIT\"},\"@openzeppelin/contracts/utils/Context.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.1) (utils/Context.sol)\\n\\npragma solidity ^0.8.20;\\n\\n/**\\n * @dev Provides information about the current execution context, including the\\n * sender of the transaction and its data. While these are generally available\\n * via msg.sender and msg.data, they should not be accessed in such a direct\\n * manner, since when dealing with meta-transactions the account sending and\\n * paying for execution may not be the actual sender (as far as an application\\n * is concerned).\\n *\\n * This contract is only required for intermediate, library-like contracts.\\n */\\nabstract contract Context {\\n    function _msgSender() internal view virtual returns (address) {\\n        return msg.sender;\\n    }\\n\\n    function _msgData() internal view virtual returns (bytes calldata) {\\n        return msg.data;\\n    }\\n\\n    function _contextSuffixLength() internal view virtual returns (uint256) {\\n        return 0;\\n    }\\n}\\n\",\"keccak256\":\"0x493033a8d1b176a037b2cc6a04dad01a5c157722049bbecf632ca876224dd4b2\",\"license\":\"MIT\"},\"@openzeppelin/contracts/utils/Pausable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.3.0) (utils/Pausable.sol)\\n\\npragma solidity ^0.8.20;\\n\\nimport {Context} from \\\"../utils/Context.sol\\\";\\n\\n/**\\n * @dev Contract module which allows children to implement an emergency stop\\n * mechanism that can be triggered by an authorized account.\\n *\\n * This module is used through inheritance. It will make available the\\n * modifiers `whenNotPaused` and `whenPaused`, which can be applied to\\n * the functions of your contract. Note that they will not be pausable by\\n * simply including this module, only once the modifiers are put in place.\\n */\\nabstract contract Pausable is Context {\\n    bool private _paused;\\n\\n    /**\\n     * @dev Emitted when the pause is triggered by `account`.\\n     */\\n    event Paused(address account);\\n\\n    /**\\n     * @dev Emitted when the pause is lifted by `account`.\\n     */\\n    event Unpaused(address account);\\n\\n    /**\\n     * @dev The operation failed because the contract is paused.\\n     */\\n    error EnforcedPause();\\n\\n    /**\\n     * @dev The operation failed because the contract is not paused.\\n     */\\n    error ExpectedPause();\\n\\n    /**\\n     * @dev Modifier to make a function callable only when the contract is not paused.\\n     *\\n     * Requirements:\\n     *\\n     * - The contract must not be paused.\\n     */\\n    modifier whenNotPaused() {\\n        _requireNotPaused();\\n        _;\\n    }\\n\\n    /**\\n     * @dev Modifier to make a function callable only when the contract is paused.\\n     *\\n     * Requirements:\\n     *\\n     * - The contract must be paused.\\n     */\\n    modifier whenPaused() {\\n        _requirePaused();\\n        _;\\n    }\\n\\n    /**\\n     * @dev Returns true if the contract is paused, and false otherwise.\\n     */\\n    function paused() public view virtual returns (bool) {\\n        return _paused;\\n    }\\n\\n    /**\\n     * @dev Throws if the contract is paused.\\n     */\\n    function _requireNotPaused() internal view virtual {\\n        if (paused()) {\\n            revert EnforcedPause();\\n        }\\n    }\\n\\n    /**\\n     * @dev Throws if the contract is not paused.\\n     */\\n    function _requirePaused() internal view virtual {\\n        if (!paused()) {\\n            revert ExpectedPause();\\n        }\\n    }\\n\\n    /**\\n     * @dev Triggers stopped state.\\n     *\\n     * Requirements:\\n     *\\n     * - The contract must not be paused.\\n     */\\n    function _pause() internal virtual whenNotPaused {\\n        _paused = true;\\n        emit Paused(_msgSender());\\n    }\\n\\n    /**\\n     * @dev Returns to normal state.\\n     *\\n     * Requirements:\\n     *\\n     * - The contract must be paused.\\n     */\\n    function _unpause() internal virtual whenPaused {\\n        _paused = false;\\n        emit Unpaused(_msgSender());\\n    }\\n}\\n\",\"keccak256\":\"0xdb484371dfbb848cb6f5d70464e9ac9b2900e4164ead76bbce4fef0b44bcc68f\",\"license\":\"MIT\"},\"@openzeppelin/contracts/utils/ReentrancyGuard.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.1.0) (utils/ReentrancyGuard.sol)\\n\\npragma solidity ^0.8.20;\\n\\n/**\\n * @dev Contract module that helps prevent reentrant calls to a function.\\n *\\n * Inheriting from `ReentrancyGuard` will make the {nonReentrant} modifier\\n * available, which can be applied to functions to make sure there are no nested\\n * (reentrant) calls to them.\\n *\\n * Note that because there is a single `nonReentrant` guard, functions marked as\\n * `nonReentrant` may not call one another. This can be worked around by making\\n * those functions `private`, and then adding `external` `nonReentrant` entry\\n * points to them.\\n *\\n * TIP: If EIP-1153 (transient storage) is available on the chain you're deploying at,\\n * consider using {ReentrancyGuardTransient} instead.\\n *\\n * TIP: If you would like to learn more about reentrancy and alternative ways\\n * to protect against it, check out our blog post\\n * https://blog.openzeppelin.com/reentrancy-after-istanbul/[Reentrancy After Istanbul].\\n */\\nabstract contract ReentrancyGuard {\\n    // Booleans are more expensive than uint256 or any type that takes up a full\\n    // word because each write operation emits an extra SLOAD to first read the\\n    // slot's contents, replace the bits taken up by the boolean, and then write\\n    // back. This is the compiler's defense against contract upgrades and\\n    // pointer aliasing, and it cannot be disabled.\\n\\n    // The values being non-zero value makes deployment a bit more expensive,\\n    // but in exchange the refund on every call to nonReentrant will be lower in\\n    // amount. Since refunds are capped to a percentage of the total\\n    // transaction's gas, it is best to keep them low in cases like this one, to\\n    // increase the likelihood of the full refund coming into effect.\\n    uint256 private constant NOT_ENTERED = 1;\\n    uint256 private constant ENTERED = 2;\\n\\n    uint256 private _status;\\n\\n    /**\\n     * @dev Unauthorized reentrant call.\\n     */\\n    error ReentrancyGuardReentrantCall();\\n\\n    constructor() {\\n        _status = NOT_ENTERED;\\n    }\\n\\n    /**\\n     * @dev Prevents a contract from calling itself, directly or indirectly.\\n     * Calling a `nonReentrant` function from another `nonReentrant`\\n     * function is not supported. It is possible to prevent this from happening\\n     * by making the `nonReentrant` function external, and making it call a\\n     * `private` function that does the actual work.\\n     */\\n    modifier nonReentrant() {\\n        _nonReentrantBefore();\\n        _;\\n        _nonReentrantAfter();\\n    }\\n\\n    function _nonReentrantBefore() private {\\n        // On the first call to nonReentrant, _status will be NOT_ENTERED\\n        if (_status == ENTERED) {\\n            revert ReentrancyGuardReentrantCall();\\n        }\\n\\n        // Any calls to nonReentrant after this point will fail\\n        _status = ENTERED;\\n    }\\n\\n    function _nonReentrantAfter() private {\\n        // By storing the original value once again, a refund is triggered (see\\n        // https://eips.ethereum.org/EIPS/eip-2200)\\n        _status = NOT_ENTERED;\\n    }\\n\\n    /**\\n     * @dev Returns true if the reentrancy guard is currently set to \\\"entered\\\", which indicates there is a\\n     * `nonReentrant` function in the call stack.\\n     */\\n    function _reentrancyGuardEntered() internal view returns (bool) {\\n        return _status == ENTERED;\\n    }\\n}\\n\",\"keccak256\":\"0x11a5a79827df29e915a12740caf62fe21ebe27c08c9ae3e09abe9ee3ba3866d3\",\"license\":\"MIT\"},\"@openzeppelin/contracts/utils/introspection/ERC165.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.4.0) (utils/introspection/ERC165.sol)\\n\\npragma solidity ^0.8.20;\\n\\nimport {IERC165} from \\\"./IERC165.sol\\\";\\n\\n/**\\n * @dev Implementation of the {IERC165} interface.\\n *\\n * Contracts that want to implement ERC-165 should inherit from this contract and override {supportsInterface} to check\\n * for the additional interface id that will be supported. For example:\\n *\\n * ```solidity\\n * function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {\\n *     return interfaceId == type(MyInterface).interfaceId || super.supportsInterface(interfaceId);\\n * }\\n * ```\\n */\\nabstract contract ERC165 is IERC165 {\\n    /// @inheritdoc IERC165\\n    function supportsInterface(bytes4 interfaceId) public view virtual returns (bool) {\\n        return interfaceId == type(IERC165).interfaceId;\\n    }\\n}\\n\",\"keccak256\":\"0x2d9dc2fe26180f74c11c13663647d38e259e45f95eb88f57b61d2160b0109d3e\",\"license\":\"MIT\"},\"@openzeppelin/contracts/utils/introspection/IERC165.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.4.0) (utils/introspection/IERC165.sol)\\n\\npragma solidity >=0.4.16;\\n\\n/**\\n * @dev Interface of the ERC-165 standard, as defined in the\\n * https://eips.ethereum.org/EIPS/eip-165[ERC].\\n *\\n * Implementers can declare support of contract interfaces, which can then be\\n * queried by others ({ERC165Checker}).\\n *\\n * For an implementation, see {ERC165}.\\n */\\ninterface IERC165 {\\n    /**\\n     * @dev Returns true if this contract implements the interface defined by\\n     * `interfaceId`. See the corresponding\\n     * https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[ERC section]\\n     * to learn more about how these ids are created.\\n     *\\n     * This function call must use less than 30 000 gas.\\n     */\\n    function supportsInterface(bytes4 interfaceId) external view returns (bool);\\n}\\n\",\"keccak256\":\"0x8891738ffe910f0cf2da09566928589bf5d63f4524dd734fd9cedbac3274dd5c\",\"license\":\"MIT\"},\"contracts/crowdfunding/Crowdfunding.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity ^0.8.0;\\n\\nimport \\\"./ICrowdfunding.sol\\\";\\nimport \\\"@openzeppelin/contracts/utils/ReentrancyGuard.sol\\\";\\nimport \\\"@openzeppelin/contracts/access/AccessControl.sol\\\";\\nimport \\\"@openzeppelin/contracts/utils/Pausable.sol\\\";\\n// \\u79fb\\u9664 Counters \\u5f15\\u5165\\uff0c\\u5728 OpenZeppelin 5.0+ \\u4e2d\\u5df2\\u4e0d\\u518d\\u63d0\\u4f9b\\u6b64\\u5e93\\n\\n/**\\n * @title Crowdfunding\\n * @dev \\u4f17\\u7b79\\u5408\\u7ea6\\u5b9e\\u73b0\\uff0c\\u9002\\u7528\\u4e8eMonad\\u533a\\u5757\\u94fe\\uff0c\\u4f7f\\u7528\\u539f\\u751fMON\\u4ee3\\u5e01\\n * \\u7b80\\u5316\\u7248\\u672c\\uff0c\\u4e0d\\u5305\\u542b\\u4ee3\\u7406\\u6a21\\u5f0f\\u76f8\\u5173\\u4ee3\\u7801\\n */\\ncontract Crowdfunding is ICrowdfunding, ReentrancyGuard, AccessControl, Pausable {\\n    // \\u79fb\\u9664 Counters \\u4f7f\\u7528\\u58f0\\u660e\\n    \\n    // \\u89d2\\u8272\\u5b9a\\u4e49\\n    bytes32 public constant ADMIN_ROLE = keccak256(\\\"ADMIN_ROLE\\\");\\n    bytes32 public constant CHARITY_ROLE = keccak256(\\\"CHARITY_ROLE\\\");\\n\\n    // \\u4f17\\u7b79ID\\u8ba1\\u6570\\u5668 - \\u4f7f\\u7528\\u666e\\u901auint256\\u66ff\\u4ee3Counters\\n    uint256 private _crowdfundingIdCounter;\\n\\n    // \\u6148\\u5584\\u5730\\u5740\\n    address public charityAddress;\\n    \\n    // \\u6148\\u5584\\u5458\\u5de5\\u5de5\\u8d44\\u6bd4\\u4f8b\\uff08\\u57fa\\u70b9\\uff1a10000 = 100%\\uff09\\n    uint256 public charityStaffSalaryBps = 2000; // 20%\\n\\n    // \\u4f17\\u7b79\\u6620\\u5c04\\n    mapping(uint256 => Crowdfunding) private _crowdfundings;\\n    \\n    // \\u53c2\\u4e0e\\u8bb0\\u5f55\\u6620\\u5c04\\n    mapping(uint256 => Participation[]) private _participations;\\n    \\n    // \\u7528\\u6237\\u53c2\\u4e0e\\u91d1\\u989d\\u6620\\u5c04\\n    mapping(uint256 => mapping(address => uint256)) private _userContributions;\\n\\n    /**\\n     * @dev \\u6784\\u9020\\u51fd\\u6570\\n     * @param _charityAddress \\u6148\\u5584\\u5730\\u5740\\n     */\\n    constructor(address _charityAddress) {\\n        require(_charityAddress != address(0), \\\"Invalid charity address\\\");\\n        \\n        charityAddress = _charityAddress;\\n        \\n        // \\u8bbe\\u7f6e\\u89d2\\u8272 - \\u4f7f\\u7528_grantRole\\u4ee3\\u66ffgrantRole\\uff0c\\u56e0\\u4e3a_grantRole\\u6ca1\\u6709\\u6743\\u9650\\u68c0\\u67e5\\n        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);\\n        _grantRole(ADMIN_ROLE, msg.sender);\\n        _grantRole(CHARITY_ROLE, _charityAddress);\\n    }\\n\\n    /**\\n     * @dev \\u521b\\u5efa\\u4f17\\u7b79\\n     * @param _targetAmount \\u76ee\\u6807\\u91d1\\u989d\\n     * @param _title \\u6807\\u9898\\n     * @param _description \\u63cf\\u8ff0\\n     * @param _imageData \\u56fe\\u7247\\u6570\\u636e\\n     * @param _duration \\u6301\\u7eed\\u65f6\\u95f4\\uff08\\u79d2\\uff09\\n     * @param _beneficiary \\u53d7\\u76ca\\u4eba\\u5730\\u5740\\n     * @param _returnOnExpire \\u8fc7\\u671f\\u662f\\u5426\\u9000\\u56de\\u8d44\\u91d1\\n     * @return crowdfundingId \\u4f17\\u7b79ID\\n     */\\n    function createCrowdfunding(\\n        uint256 _targetAmount,\\n        string memory _title,\\n        string memory _description,\\n        bytes memory _imageData,\\n        uint256 _duration,\\n        address _beneficiary,\\n        bool _returnOnExpire\\n    ) external override whenNotPaused nonReentrant returns (uint256) {\\n        require(_targetAmount > 0, \\\"Target amount must be greater than 0\\\");\\n        require(_duration > 0, \\\"Duration must be greater than 0\\\");\\n        require(_beneficiary != address(0), \\\"Invalid beneficiary address\\\");\\n        \\n        // \\u589e\\u52a0\\u4f17\\u7b79ID - \\u4f7f\\u7528\\u666e\\u901auint256\\u9012\\u589e\\n        _crowdfundingIdCounter++;\\n        uint256 crowdfundingId = _crowdfundingIdCounter;\\n        \\n        // \\u521b\\u5efa\\u4f17\\u7b79\\n        uint256 startTime = block.timestamp;\\n        uint256 endTime = startTime + _duration;\\n        \\n        _crowdfundings[crowdfundingId] = Crowdfunding({\\n            id: crowdfundingId,\\n            creator: msg.sender,\\n            beneficiary: _beneficiary,\\n            targetAmount: _targetAmount,\\n            currentAmount: 0,\\n            startTime: startTime,\\n            endTime: endTime,\\n            duration: _duration,\\n            title: _title,\\n            description: _description,\\n            imageData: _imageData,\\n            status: CrowdfundingStatus.Active,\\n            excessAmount: 0,\\n            isCompleted: false,\\n            isStaking: false,\\n            returnOnExpire: _returnOnExpire\\n        });\\n        \\n        // \\u89e6\\u53d1\\u4e8b\\u4ef6\\n        emit CrowdfundingCreated(\\n            crowdfundingId,\\n            msg.sender,\\n            _beneficiary,\\n            _targetAmount,\\n            _duration,\\n            _title,\\n            _description,\\n            _imageData,\\n            block.timestamp\\n        );\\n        \\n        return crowdfundingId;\\n    }\\n\\n    /**\\n     * @dev \\u53c2\\u4e0e\\u4f17\\u7b79\\n     * @param _crowdfundingId \\u4f17\\u7b79ID\\n     * @param _message \\u7559\\u8a00\\n     * \\u6ce8\\u610f\\uff1a\\u53c2\\u4e0e\\u91d1\\u989d\\u901a\\u8fc7msg.value\\u4f20\\u5165\\uff0c\\u4f7f\\u7528\\u539f\\u751fMON\\u4ee3\\u5e01\\n     */\\n    function participateInCrowdfunding(\\n        uint256 _crowdfundingId,\\n        string memory _message\\n    ) external override payable whenNotPaused nonReentrant {\\n        Crowdfunding storage crowdfunding = _crowdfundings[_crowdfundingId];\\n        \\n        require(crowdfunding.id != 0, \\\"Crowdfunding does not exist\\\");\\n        require(crowdfunding.status == CrowdfundingStatus.Active, \\\"Crowdfunding is not active\\\");\\n        require(block.timestamp <= crowdfunding.endTime, \\\"Crowdfunding has ended\\\");\\n        require(msg.value > 0, \\\"Amount must be greater than 0\\\");\\n        \\n        uint256 amount = msg.value;\\n        \\n        // \\u66f4\\u65b0\\u4f17\\u7b79\\u4fe1\\u606f\\n        crowdfunding.currentAmount += amount;\\n        _userContributions[_crowdfundingId][msg.sender] += amount;\\n        \\n        // \\u6dfb\\u52a0\\u53c2\\u4e0e\\u8bb0\\u5f55\\n        _participations[_crowdfundingId].push(Participation({\\n            participant: msg.sender,\\n            amount: amount,\\n            message: _message,\\n            timestamp: block.timestamp\\n        }));\\n        \\n        // \\u68c0\\u67e5\\u662f\\u5426\\u8fbe\\u5230\\u76ee\\u6807\\n        if (crowdfunding.currentAmount >= crowdfunding.targetAmount && !crowdfunding.isCompleted) {\\n            crowdfunding.status = CrowdfundingStatus.Completed;\\n            crowdfunding.isCompleted = true;\\n            crowdfunding.excessAmount = crowdfunding.currentAmount - crowdfunding.targetAmount;\\n            \\n            emit CrowdfundingCompleted(\\n                _crowdfundingId,\\n                crowdfunding.currentAmount,\\n                crowdfunding.excessAmount,\\n                block.timestamp\\n            );\\n        }\\n        \\n        // \\u89e6\\u53d1\\u4e8b\\u4ef6\\n        emit CrowdfundingParticipated(\\n            _crowdfundingId,\\n            msg.sender,\\n            amount,\\n            _message,\\n            block.timestamp\\n        );\\n    }\\n\\n    /**\\n     * @dev \\u63d0\\u53d6\\u4f17\\u7b79\\u8d44\\u91d1\\uff08\\u53d7\\u76ca\\u4eba\\u8c03\\u7528\\uff09\\n     * @param _crowdfundingId \\u4f17\\u7b79ID\\n     */\\n    function withdrawFunds(uint256 _crowdfundingId) external override whenNotPaused nonReentrant {\\n        Crowdfunding storage crowdfunding = _crowdfundings[_crowdfundingId];\\n        \\n        require(crowdfunding.id != 0, \\\"Crowdfunding does not exist\\\");\\n        require(msg.sender == crowdfunding.beneficiary, \\\"Only beneficiary can withdraw funds\\\");\\n        require(crowdfunding.status == CrowdfundingStatus.Completed, \\\"Crowdfunding is not completed\\\");\\n        \\n        uint256 withdrawAmount = crowdfunding.targetAmount;\\n        \\n        // \\u8f6c\\u79fbMON\\n        payable(crowdfunding.beneficiary).transfer(withdrawAmount);\\n        \\n        // \\u89e6\\u53d1\\u4e8b\\u4ef6\\n        emit FundsWithdrawn(\\n            _crowdfundingId,\\n            crowdfunding.beneficiary,\\n            withdrawAmount,\\n            block.timestamp\\n        );\\n    }\\n\\n    /**\\n     * @dev \\u9000\\u56de\\u8d44\\u91d1\\uff08\\u4f17\\u7b79\\u8fc7\\u671f\\u4e14\\u8bbe\\u7f6e\\u4e3a\\u9000\\u56de\\u65f6\\uff0c\\u53c2\\u4e0e\\u8005\\u8c03\\u7528\\uff09\\n     * @param _crowdfundingId \\u4f17\\u7b79ID\\n     */\\n    function returnFunds(uint256 _crowdfundingId) external override whenNotPaused nonReentrant {\\n        Crowdfunding storage crowdfunding = _crowdfundings[_crowdfundingId];\\n        \\n        require(crowdfunding.id != 0, \\\"Crowdfunding does not exist\\\");\\n        require(block.timestamp > crowdfunding.endTime, \\\"Crowdfunding has not ended yet\\\");\\n        require(crowdfunding.currentAmount < crowdfunding.targetAmount, \\\"Crowdfunding has reached its target\\\");\\n        require(crowdfunding.returnOnExpire, \\\"Funds are not returnable\\\");\\n        \\n        uint256 contribution = _userContributions[_crowdfundingId][msg.sender];\\n        require(contribution > 0, \\\"No contribution to return\\\");\\n        \\n        // \\u66f4\\u65b0\\u72b6\\u6001\\n        crowdfunding.status = CrowdfundingStatus.Expired;\\n        _userContributions[_crowdfundingId][msg.sender] = 0;\\n        \\n        // \\u8f6c\\u79fbMON\\n        payable(msg.sender).transfer(contribution);\\n        \\n        // \\u89e6\\u53d1\\u4e8b\\u4ef6\\n        emit FundsReturned(\\n            _crowdfundingId,\\n            msg.sender,\\n            contribution,\\n            block.timestamp\\n        );\\n        \\n        // \\u5982\\u679c\\u662f\\u7b2c\\u4e00\\u6b21\\u8fc7\\u671f\\uff0c\\u89e6\\u53d1\\u8fc7\\u671f\\u4e8b\\u4ef6\\n        if (crowdfunding.status != CrowdfundingStatus.Expired) {\\n            emit CrowdfundingExpired(\\n                _crowdfundingId,\\n                crowdfunding.currentAmount,\\n                block.timestamp\\n            );\\n        }\\n    }\\n\\n    /**\\n     * @dev \\u5c06\\u8fc7\\u671f\\u4f17\\u7b79\\u8d44\\u91d1\\u8f6c\\u79fb\\u5230\\u6148\\u5584\\u5730\\u5740\\uff08\\u7ba1\\u7406\\u5458\\u8c03\\u7528\\uff09\\n     * @param _crowdfundingId \\u4f17\\u7b79ID\\n     */\\n    function transferExpiredFundsToCharity(uint256 _crowdfundingId) external whenNotPaused nonReentrant onlyRole(ADMIN_ROLE) {\\n        Crowdfunding storage crowdfunding = _crowdfundings[_crowdfundingId];\\n        \\n        require(crowdfunding.id != 0, \\\"Crowdfunding does not exist\\\");\\n        require(block.timestamp > crowdfunding.endTime, \\\"Crowdfunding has not ended yet\\\");\\n        require(crowdfunding.currentAmount < crowdfunding.targetAmount, \\\"Crowdfunding has reached its target\\\");\\n        require(!crowdfunding.returnOnExpire, \\\"Funds are returnable\\\");\\n        \\n        // \\u66f4\\u65b0\\u72b6\\u6001\\n        crowdfunding.status = CrowdfundingStatus.Expired;\\n        \\n        // \\u8f6c\\u79fbMON\\u5230\\u6148\\u5584\\u5730\\u5740\\n        payable(charityAddress).transfer(crowdfunding.currentAmount);\\n        \\n        // \\u89e6\\u53d1\\u4e8b\\u4ef6\\n        emit CrowdfundingExpired(\\n            _crowdfundingId,\\n            crowdfunding.currentAmount,\\n            block.timestamp\\n        );\\n    }\\n\\n    /**\\n     * @dev \\u8d28\\u62bc\\u8d85\\u989d\\u8d44\\u91d1\\uff08\\u7ba1\\u7406\\u5458\\u8c03\\u7528\\uff09\\n     * @param _crowdfundingId \\u4f17\\u7b79ID\\n     */\\n    function stakeExcessFunds(uint256 _crowdfundingId) external override whenNotPaused nonReentrant onlyRole(ADMIN_ROLE) {\\n        Crowdfunding storage crowdfunding = _crowdfundings[_crowdfundingId];\\n        \\n        require(crowdfunding.id != 0, \\\"Crowdfunding does not exist\\\");\\n        require(crowdfunding.status == CrowdfundingStatus.Completed, \\\"Crowdfunding is not completed\\\");\\n        require(crowdfunding.excessAmount > 0, \\\"No excess funds to stake\\\");\\n        require(!crowdfunding.isStaking, \\\"Funds are already staked\\\");\\n        \\n        // \\u66f4\\u65b0\\u72b6\\u6001\\n        crowdfunding.isStaking = true;\\n        \\n        // \\u8fd9\\u91cc\\u53ef\\u4ee5\\u6dfb\\u52a0\\u8d28\\u62bc\\u903b\\u8f91\\uff0c\\u4f8b\\u5982\\u5c06\\u8d44\\u91d1\\u8f6c\\u79fb\\u5230\\u8d28\\u62bc\\u5408\\u7ea6\\n        // \\u672c\\u793a\\u4f8b\\u4e2d\\u4ec5\\u66f4\\u65b0\\u72b6\\u6001\\n    }\\n\\n    /**\\n     * @dev \\u5206\\u914d\\u8d28\\u62bc\\u6536\\u76ca\\uff08\\u7ba1\\u7406\\u5458\\u8c03\\u7528\\uff09\\n     * @param _crowdfundingId \\u4f17\\u7b79ID\\n     * @param _rewardAmount \\u6536\\u76ca\\u91d1\\u989d\\n     * \\u6ce8\\u610f\\uff1a\\u6536\\u76ca\\u91d1\\u989d\\u901a\\u8fc7msg.value\\u4f20\\u5165\\uff0c\\u4f7f\\u7528\\u539f\\u751fMON\\u4ee3\\u5e01\\n     */\\n    function distributeStakingRewards(\\n        uint256 _crowdfundingId, \\n        uint256 _rewardAmount\\n    ) external override payable whenNotPaused nonReentrant onlyRole(ADMIN_ROLE) {\\n        Crowdfunding storage crowdfunding = _crowdfundings[_crowdfundingId];\\n        \\n        require(crowdfunding.id != 0, \\\"Crowdfunding does not exist\\\");\\n        require(crowdfunding.isStaking, \\\"Funds are not staked\\\");\\n        require(_rewardAmount > 0, \\\"Reward amount must be greater than 0\\\");\\n        require(msg.value == _rewardAmount, \\\"Sent value must match reward amount\\\");\\n        \\n        // \\u8ba1\\u7b97\\u6148\\u5584\\u5458\\u5de5\\u5de5\\u8d44\\n        uint256 charityStaffSalary = (_rewardAmount * charityStaffSalaryBps) / 10000;\\n        uint256 charityAmount = _rewardAmount - charityStaffSalary;\\n        \\n        // \\u8f6c\\u79fbMON\\u5230\\u6148\\u5584\\u5730\\u5740\\n        payable(charityAddress).transfer(charityAmount);\\n        \\n        // \\u89e6\\u53d1\\u4e8b\\u4ef6\\n        emit StakingRewardDistributed(\\n            _crowdfundingId,\\n            _rewardAmount,\\n            charityAmount,\\n            block.timestamp\\n        );\\n    }\\n\\n    /**\\n     * @dev \\u83b7\\u53d6\\u4f17\\u7b79\\u4fe1\\u606f\\n     * @param _crowdfundingId \\u4f17\\u7b79ID\\n     * @return \\u4f17\\u7b79\\u4fe1\\u606f\\n     */\\n    function getCrowdfundingInfo(uint256 _crowdfundingId) \\n        external view override returns (Crowdfunding memory) {\\n        return _crowdfundings[_crowdfundingId];\\n    }\\n\\n    /**\\n     * @dev \\u83b7\\u53d6\\u53c2\\u4e0e\\u8bb0\\u5f55\\n     * @param _crowdfundingId \\u4f17\\u7b79ID\\n     * @return \\u53c2\\u4e0e\\u8bb0\\u5f55\\u6570\\u7ec4\\n     */\\n    function getParticipationRecords(uint256 _crowdfundingId) \\n        external view override returns (Participation[] memory) {\\n        return _participations[_crowdfundingId];\\n    }\\n    \\n    /**\\n     * @dev \\u83b7\\u53d6\\u7528\\u6237\\u5728\\u7279\\u5b9a\\u4f17\\u7b79\\u4e2d\\u7684\\u53c2\\u4e0e\\u91d1\\u989d\\n     * @param _crowdfundingId \\u4f17\\u7b79ID\\n     * @param _participant \\u53c2\\u4e0e\\u8005\\u5730\\u5740\\n     * @return \\u53c2\\u4e0e\\u91d1\\u989d\\n     */\\n    function getUserContribution(uint256 _crowdfundingId, address _participant)\\n        external view override returns (uint256) {\\n        return _userContributions[_crowdfundingId][_participant];\\n    }\\n    \\n    /**\\n     * @dev \\u8bbe\\u7f6e\\u6148\\u5584\\u5730\\u5740\\n     * @param _charityAddress \\u65b0\\u7684\\u6148\\u5584\\u5730\\u5740\\n     */\\n    function setCharityAddress(address _charityAddress) external onlyRole(ADMIN_ROLE) {\\n        require(_charityAddress != address(0), \\\"Invalid charity address\\\");\\n        charityAddress = _charityAddress;\\n        \\n        // \\u66f4\\u65b0\\u89d2\\u8272\\n        revokeRole(CHARITY_ROLE, charityAddress);\\n        grantRole(CHARITY_ROLE, _charityAddress);\\n    }\\n    \\n    /**\\n     * @dev \\u8bbe\\u7f6e\\u6148\\u5584\\u5458\\u5de5\\u5de5\\u8d44\\u6bd4\\u4f8b\\n     * @param _charityStaffSalaryBps \\u65b0\\u7684\\u6148\\u5584\\u5458\\u5de5\\u5de5\\u8d44\\u6bd4\\u4f8b\\n     */\\n    function setCharityStaffSalaryBps(uint256 _charityStaffSalaryBps) external onlyRole(ADMIN_ROLE) {\\n        require(_charityStaffSalaryBps <= 10000, \\\"Invalid basis points value\\\");\\n        charityStaffSalaryBps = _charityStaffSalaryBps;\\n    }\\n    \\n    /**\\n     * @dev \\u6682\\u505c\\u5408\\u7ea6\\n     */\\n    function pause() external onlyRole(ADMIN_ROLE) {\\n        _pause();\\n    }\\n    \\n    /**\\n     * @dev \\u6062\\u590d\\u5408\\u7ea6\\n     */\\n    function unpause() external onlyRole(ADMIN_ROLE) {\\n        _unpause();\\n    }\\n    \\n    /**\\n     * @dev \\u63a5\\u6536MON\\u7684\\u56de\\u9000\\u51fd\\u6570\\n     */\\n    receive() external payable {\\n        // \\u5141\\u8bb8\\u5408\\u7ea6\\u63a5\\u6536MON\\n    }\\n} \",\"keccak256\":\"0xe7b8952fa6913aa5b2ac427a7001d7111284e8d98290cef847b05ef2b279a014\",\"license\":\"MIT\"},\"contracts/crowdfunding/ICrowdfunding.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity ^0.8.0;\\n\\n/**\\n * @title ICrowdfunding\\n * @dev \\u4f17\\u7b79\\u5408\\u7ea6\\u63a5\\u53e3\\uff0c\\u5b9a\\u4e49\\u4e86\\u4f17\\u7b79\\u5408\\u7ea6\\u7684\\u4e3b\\u8981\\u529f\\u80fd\\u548c\\u4e8b\\u4ef6\\n * \\u9002\\u7528\\u4e8eMonad\\u533a\\u5757\\u94fe\\uff0c\\u4f7f\\u7528\\u539f\\u751fMON\\u4ee3\\u5e01\\n */\\ninterface ICrowdfunding {\\n    /**\\n     * @dev \\u4f17\\u7b79\\u72b6\\u6001\\u679a\\u4e3e\\n     */\\n    enum CrowdfundingStatus {\\n        Active,     // \\u6d3b\\u8dc3\\n        Completed,  // \\u5df2\\u5b8c\\u6210\\n        Cancelled,  // \\u5df2\\u53d6\\u6d88\\n        Expired     // \\u5df2\\u8fc7\\u671f\\n    }\\n\\n    /**\\n     * @dev \\u4f17\\u7b79\\u4fe1\\u606f\\u7ed3\\u6784\\u4f53\\n     */\\n    struct Crowdfunding {\\n        uint256 id;                    // \\u4f17\\u7b79ID\\n        address creator;               // \\u521b\\u5efa\\u8005\\u5730\\u5740\\n        address beneficiary;           // \\u53d7\\u76ca\\u4eba\\u5730\\u5740\\n        uint256 targetAmount;          // \\u76ee\\u6807\\u91d1\\u989d\\n        uint256 currentAmount;         // \\u5f53\\u524d\\u91d1\\u989d\\n        uint256 startTime;             // \\u5f00\\u59cb\\u65f6\\u95f4\\n        uint256 endTime;               // \\u7ed3\\u675f\\u65f6\\u95f4\\n        uint256 duration;              // \\u6301\\u7eed\\u65f6\\u95f4\\n        string title;                  // \\u6807\\u9898\\n        string description;            // \\u63cf\\u8ff0\\n        bytes imageData;               // \\u56fe\\u7247\\u6570\\u636e\\n        CrowdfundingStatus status;     // \\u72b6\\u6001\\n        uint256 excessAmount;          // \\u8d85\\u989d\\u91d1\\u989d\\n        bool isCompleted;              // \\u662f\\u5426\\u5b8c\\u6210\\n        bool isStaking;                // \\u662f\\u5426\\u7528\\u4e8e\\u8d28\\u62bc\\n        bool returnOnExpire;           // \\u8fc7\\u671f\\u662f\\u5426\\u9000\\u56de\\u8d44\\u91d1\\n    }\\n\\n    /**\\n     * @dev \\u53c2\\u4e0e\\u8bb0\\u5f55\\u7ed3\\u6784\\u4f53\\n     */\\n    struct Participation {\\n        address participant;           // \\u53c2\\u4e0e\\u8005\\u5730\\u5740\\n        uint256 amount;                // \\u53c2\\u4e0e\\u91d1\\u989d\\n        string message;                // \\u7559\\u8a00\\n        uint256 timestamp;             // \\u53c2\\u4e0e\\u65f6\\u95f4\\n    }\\n\\n    /**\\n     * @dev \\u4f17\\u7b79\\u521b\\u5efa\\u4e8b\\u4ef6\\n     */\\n    event CrowdfundingCreated(\\n        uint256 indexed crowdfundingId,\\n        address indexed creator,\\n        address indexed beneficiary,\\n        uint256 targetAmount,\\n        uint256 duration,\\n        string title,\\n        string description,\\n        bytes imageData,\\n        uint256 timestamp\\n    );\\n\\n    /**\\n     * @dev \\u4f17\\u7b79\\u53c2\\u4e0e\\u4e8b\\u4ef6\\n     */\\n    event CrowdfundingParticipated(\\n        uint256 indexed crowdfundingId,\\n        address indexed participant,\\n        uint256 amount,\\n        string message,\\n        uint256 timestamp\\n    );\\n\\n    /**\\n     * @dev \\u4f17\\u7b79\\u5b8c\\u6210\\u4e8b\\u4ef6\\n     */\\n    event CrowdfundingCompleted(\\n        uint256 indexed crowdfundingId,\\n        uint256 totalAmount,\\n        uint256 excessAmount,\\n        uint256 timestamp\\n    );\\n\\n    /**\\n     * @dev \\u4f17\\u7b79\\u8fc7\\u671f\\u4e8b\\u4ef6\\n     */\\n    event CrowdfundingExpired(\\n        uint256 indexed crowdfundingId,\\n        uint256 totalAmount,\\n        uint256 timestamp\\n    );\\n\\n    /**\\n     * @dev \\u8d44\\u91d1\\u63d0\\u53d6\\u4e8b\\u4ef6\\n     */\\n    event FundsWithdrawn(\\n        uint256 indexed crowdfundingId,\\n        address indexed beneficiary,\\n        uint256 amount,\\n        uint256 timestamp\\n    );\\n\\n    /**\\n     * @dev \\u8d44\\u91d1\\u9000\\u56de\\u4e8b\\u4ef6\\n     */\\n    event FundsReturned(\\n        uint256 indexed crowdfundingId,\\n        address indexed participant,\\n        uint256 amount,\\n        uint256 timestamp\\n    );\\n\\n    /**\\n     * @dev \\u8d28\\u62bc\\u6536\\u76ca\\u4e8b\\u4ef6\\n     */\\n    event StakingRewardDistributed(\\n        uint256 indexed crowdfundingId,\\n        uint256 rewardAmount,\\n        uint256 charityAmount,\\n        uint256 timestamp\\n    );\\n\\n    /**\\n     * @dev \\u521b\\u5efa\\u4f17\\u7b79\\n     * @param _targetAmount \\u76ee\\u6807\\u91d1\\u989d\\n     * @param _title \\u6807\\u9898\\n     * @param _description \\u63cf\\u8ff0\\n     * @param _imageData \\u56fe\\u7247\\u6570\\u636e\\n     * @param _duration \\u6301\\u7eed\\u65f6\\u95f4\\uff08\\u79d2\\uff09\\n     * @param _beneficiary \\u53d7\\u76ca\\u4eba\\u5730\\u5740\\n     * @param _returnOnExpire \\u8fc7\\u671f\\u662f\\u5426\\u9000\\u56de\\u8d44\\u91d1\\n     * @return crowdfundingId \\u4f17\\u7b79ID\\n     */\\n    function createCrowdfunding(\\n        uint256 _targetAmount,\\n        string memory _title,\\n        string memory _description,\\n        bytes memory _imageData,\\n        uint256 _duration,\\n        address _beneficiary,\\n        bool _returnOnExpire\\n    ) external returns (uint256 crowdfundingId);\\n\\n    /**\\n     * @dev \\u53c2\\u4e0e\\u4f17\\u7b79\\n     * @param _crowdfundingId \\u4f17\\u7b79ID\\n     * @param _message \\u7559\\u8a00\\n     * \\u6ce8\\u610f\\uff1a\\u53c2\\u4e0e\\u91d1\\u989d\\u901a\\u8fc7msg.value\\u4f20\\u5165\\uff0c\\u4f7f\\u7528\\u539f\\u751fMON\\u4ee3\\u5e01\\n     */\\n    function participateInCrowdfunding(\\n        uint256 _crowdfundingId,\\n        string memory _message\\n    ) external payable;\\n\\n    /**\\n     * @dev \\u63d0\\u53d6\\u4f17\\u7b79\\u8d44\\u91d1\\uff08\\u53d7\\u76ca\\u4eba\\u8c03\\u7528\\uff09\\n     * @param _crowdfundingId \\u4f17\\u7b79ID\\n     */\\n    function withdrawFunds(uint256 _crowdfundingId) external;\\n\\n    /**\\n     * @dev \\u9000\\u56de\\u8d44\\u91d1\\uff08\\u4f17\\u7b79\\u8fc7\\u671f\\u4e14\\u8bbe\\u7f6e\\u4e3a\\u9000\\u56de\\u65f6\\uff0c\\u53c2\\u4e0e\\u8005\\u8c03\\u7528\\uff09\\n     * @param _crowdfundingId \\u4f17\\u7b79ID\\n     */\\n    function returnFunds(uint256 _crowdfundingId) external;\\n\\n    /**\\n     * @dev \\u8d28\\u62bc\\u8d85\\u989d\\u8d44\\u91d1\\uff08\\u7ba1\\u7406\\u5458\\u8c03\\u7528\\uff09\\n     * @param _crowdfundingId \\u4f17\\u7b79ID\\n     */\\n    function stakeExcessFunds(uint256 _crowdfundingId) external;\\n\\n    /**\\n     * @dev \\u5206\\u914d\\u8d28\\u62bc\\u6536\\u76ca\\uff08\\u7ba1\\u7406\\u5458\\u8c03\\u7528\\uff09\\n     * @param _crowdfundingId \\u4f17\\u7b79ID\\n     * @param _rewardAmount \\u6536\\u76ca\\u91d1\\u989d\\n     */\\n    function distributeStakingRewards(\\n        uint256 _crowdfundingId,\\n        uint256 _rewardAmount\\n    ) external payable;\\n\\n    /**\\n     * @dev \\u83b7\\u53d6\\u4f17\\u7b79\\u4fe1\\u606f\\n     * @param _crowdfundingId \\u4f17\\u7b79ID\\n     * @return \\u4f17\\u7b79\\u4fe1\\u606f\\n     */\\n    function getCrowdfundingInfo(uint256 _crowdfundingId)\\n        external view returns (Crowdfunding memory);\\n\\n    /**\\n     * @dev \\u83b7\\u53d6\\u53c2\\u4e0e\\u8bb0\\u5f55\\n     * @param _crowdfundingId \\u4f17\\u7b79ID\\n     * @return \\u53c2\\u4e0e\\u8bb0\\u5f55\\u6570\\u7ec4\\n     */\\n    function getParticipationRecords(uint256 _crowdfundingId)\\n        external view returns (Participation[] memory);\\n\\n    /**\\n     * @dev \\u83b7\\u53d6\\u7528\\u6237\\u5728\\u7279\\u5b9a\\u4f17\\u7b79\\u4e2d\\u7684\\u53c2\\u4e0e\\u91d1\\u989d\\n     * @param _crowdfundingId \\u4f17\\u7b79ID\\n     * @param _participant \\u53c2\\u4e0e\\u8005\\u5730\\u5740\\n     * @return \\u53c2\\u4e0e\\u91d1\\u989d\\n     */\\n    function getUserContribution(uint256 _crowdfundingId, address _participant)\\n        external view returns (uint256);\\n} \",\"keccak256\":\"0xb5fd98f8a8f2ea0355a043faf1220f5d1bab18400f79bc935999136bd6abaf54\",\"license\":\"MIT\"}},\"version\":1}",
+  "bytecode": "0x60806040526107d06005553480156200001757600080fd5b5060405162002873380380620028738339810160408190526200003a91620001bb565b60016000556001600160a01b0381166200009a5760405162461bcd60e51b815260206004820152601760248201527f496e76616c696420636861726974792061646472657373000000000000000000604482015260640160405180910390fd5b600480546001600160a01b0319166001600160a01b038316179055620000c260003362000124565b50620000ef7fa49807205ce4d355092ef5a8a18f56e8913cf4a201fbe287825b095693c217753362000124565b506200011c7f838cb9e68162e54d2dfda44baa96273d8a6cb729c0d42995215e0f52841feb778262000124565b5050620001ed565b60008281526001602090815260408083206001600160a01b038516845290915281205460ff16620001b15760008381526001602081815260408084206001600160a01b0387168086529252808420805460ff19169093179092559051339286917f2f8788117e7eff1d82e926ec794901d17c78024a50270940304540a733656f0d9190a4506001620001b5565b5060005b92915050565b600060208284031215620001ce57600080fd5b81516001600160a01b0381168114620001e657600080fd5b9392505050565b61267680620001fd6000396000f3fe6080604052600436106101855760003560e01c8063746255c8116100d1578063cc4f0e7d1161008a578063d8e9724611610064578063d8e97246146104bc578063d968e9fc146104d2578063dc1780ea146104f2578063ea0ebc0c1461050557600080fd5b8063cc4f0e7d1461045c578063d3bb0b7d1461046f578063d547741f1461049c57600080fd5b8063746255c81461039857806375b238fc146103b85780638456cb59146103da57806391d14854146103ef578063a217fddf1461040f578063afcf2fc41461042457600080fd5b80633f4ba83a1161013e578063566264ad11610118578063566264ad146102ff5780635af24c381461032c5780635c975abb1461034c5780636f0c80671461036457600080fd5b80633f4ba83a1461028757806345755dd61461029c5780635117e338146102bc57600080fd5b806301ffc9a7146101915780630c9be46d146101c6578063155dd5ee146101e8578063248a9ca3146102085780632f2ff15d1461024757806336568abe1461026757600080fd5b3661018c57005b600080fd5b34801561019d57600080fd5b506101b16101ac366004611e62565b610525565b60405190151581526020015b60405180910390f35b3480156101d257600080fd5b506101e66101e1366004611eaf565b61055c565b005b3480156101f457600080fd5b506101e6610203366004611eca565b610646565b34801561021457600080fd5b50610239610223366004611eca565b6000908152600160208190526040909120015490565b6040519081526020016101bd565b34801561025357600080fd5b506101e6610262366004611ee3565b6107f1565b34801561027357600080fd5b506101e6610282366004611ee3565b61081d565b34801561029357600080fd5b506101e6610855565b3480156102a857600080fd5b506101e66102b7366004611eca565b610875565b3480156102c857600080fd5b506102396102d7366004611ee3565b60009182526008602090815260408084206001600160a01b0393909316845291905290205490565b34801561030b57600080fd5b5061031f61031a366004611eca565b610aee565b6040516101bd9190611f55565b34801561033857600080fd5b506102396103473660046120a8565b610c1c565b34801561035857600080fd5b5060025460ff166101b1565b34801561037057600080fd5b506102397f838cb9e68162e54d2dfda44baa96273d8a6cb729c0d42995215e0f52841feb7781565b3480156103a457600080fd5b506101e66103b3366004611eca565b610fab565b3480156103c457600080fd5b5061023960008051602061262183398151915281565b3480156103e657600080fd5b506101e661101b565b3480156103fb57600080fd5b506101b161040a366004611ee3565b61103b565b34801561041b57600080fd5b50610239600081565b34801561043057600080fd5b50600454610444906001600160a01b031681565b6040516001600160a01b0390911681526020016101bd565b6101e661046a366004612179565b611066565b34801561047b57600080fd5b5061048f61048a366004611eca565b61127b565b6040516101bd91906121d3565b3480156104a857600080fd5b506101e66104b7366004611ee3565b611529565b3480156104c857600080fd5b5061023960055481565b3480156104de57600080fd5b506101e66104ed366004611eca565b61154f565b6101e6610500366004612307565b6116d7565b34801561051157600080fd5b506101e6610520366004611eca565b6119ea565b60006001600160e01b03198216637965db0b60e01b148061055657506301ffc9a760e01b6001600160e01b03198316145b92915050565b60008051602061262183398151915261057481611b97565b6001600160a01b0382166105cf5760405162461bcd60e51b815260206004820152601760248201527f496e76616c69642063686172697479206164647265737300000000000000000060448201526064015b60405180910390fd5b600480546001600160a01b0319166001600160a01b038416908117909155610618907f838cb9e68162e54d2dfda44baa96273d8a6cb729c0d42995215e0f52841feb7790611529565b6106427f838cb9e68162e54d2dfda44baa96273d8a6cb729c0d42995215e0f52841feb77836107f1565b5050565b61064e611ba1565b610656611bc7565b600081815260066020526040812080549091036106855760405162461bcd60e51b81526004016105c69061234e565b60028101546001600160a01b031633146106ed5760405162461bcd60e51b815260206004820152602360248201527f4f6e6c792062656e65666963696172792063616e2077697468647261772066756044820152626e647360e81b60648201526084016105c6565b6001600b82015460ff1660038111156107085761070861219b565b146107555760405162461bcd60e51b815260206004820152601d60248201527f43726f776466756e64696e67206973206e6f7420636f6d706c6574656400000060448201526064016105c6565b600381015460028201546040516001600160a01b039091169082156108fc029083906000818181858888f19350505050158015610796573d6000803e3d6000fd5b506002820154604080518381524260208201526001600160a01b039092169185917f3dbb1a26f29aef1264c12ca1285deb60cca5666d8b17100c7ea1602c0a4014f6910160405180910390a350506107ee6001600055565b50565b6000828152600160208190526040909120015461080d81611b97565b6108178383611bf1565b50505050565b6001600160a01b03811633146108465760405163334bd91960e11b815260040160405180910390fd5b6108508282611c6a565b505050565b60008051602061262183398151915261086d81611b97565b6107ee611cd7565b61087d611ba1565b610885611bc7565b600081815260066020526040812080549091036108b45760405162461bcd60e51b81526004016105c69061234e565b806006015442116109075760405162461bcd60e51b815260206004820152601e60248201527f43726f776466756e64696e6720686173206e6f7420656e64656420796574000060448201526064016105c6565b806003015481600401541061092e5760405162461bcd60e51b81526004016105c690612385565b600d81015462010000900460ff166109885760405162461bcd60e51b815260206004820152601860248201527f46756e647320617265206e6f742072657475726e61626c65000000000000000060448201526064016105c6565b6000828152600860209081526040808320338452909152902054806109ef5760405162461bcd60e51b815260206004820152601960248201527f4e6f20636f6e747269627574696f6e20746f2072657475726e0000000000000060448201526064016105c6565b600b8201805460ff1916600317905560008381526008602090815260408083203380855292528083208390555190916108fc841502918491818181858888f19350505050158015610a44573d6000803e3d6000fd5b5060408051828152426020820152339185917f3968e2c40e1b827d86bdc4f65e7c409742d76e04f79fbed74433153e595df647910160405180910390a36003600b83015460ff166003811115610a9c57610a9c61219b565b14610ae25760048201546040805191825242602083015284917f239f816b2f48cb486d6fb0707bd581965e917af2ba557c18e14d1849df4c460e91015b60405180910390a25b50506107ee6001600055565b606060076000838152602001908152602001600020805480602002602001604051908101604052809291908181526020016000905b82821015610c11576000848152602090819020604080516080810182526004860290920180546001600160a01b0316835260018101549383019390935260028301805492939291840191610b76906123c8565b80601f0160208091040260200160405190810160405280929190818152602001828054610ba2906123c8565b8015610bef5780601f10610bc457610100808354040283529160200191610bef565b820191906000526020600020905b815481529060010190602001808311610bd257829003601f168201915b5050505050815260200160038201548152505081526020019060010190610b23565b505050509050919050565b6000610c26611ba1565b610c2e611bc7565b60008811610c8a5760405162461bcd60e51b8152602060048201526024808201527f54617267657420616d6f756e74206d75737420626520677265617465722074686044820152630616e20360e41b60648201526084016105c6565b60008411610cda5760405162461bcd60e51b815260206004820152601f60248201527f4475726174696f6e206d7573742062652067726561746572207468616e20300060448201526064016105c6565b6001600160a01b038316610d305760405162461bcd60e51b815260206004820152601b60248201527f496e76616c69642062656e65666963696172792061646472657373000000000060448201526064016105c6565b60038054906000610d4083612418565b9091555050600354426000610d558783612431565b9050604051806102000160405280848152602001336001600160a01b03168152602001876001600160a01b031681526020018c8152602001600081526020018381526020018281526020018881526020018b81526020018a815260200189815260200160006003811115610dcb57610dcb61219b565b815260006020808301829052604080840183905260608085018490528a151560809586015288845260068084529382902086518155928601516001840180546001600160a01b03199081166001600160a01b039384161790915592870151600285018054909416911617909155840151600382015591830151600483015560a0830151600583015560c08301519082015560e082015160078201556101008201516008820190610e7b9082612492565b506101208201516009820190610e919082612492565b50610140820151600a820190610ea79082612492565b50610160820151600b8201805460ff19166001836003811115610ecc57610ecc61219b565b021790555061018082015181600c01556101a082015181600d0160006101000a81548160ff0219169083151502179055506101c082015181600d0160016101000a81548160ff0219169083151502179055506101e082015181600d0160026101000a81548160ff021916908315150217905550905050856001600160a01b0316336001600160a01b0316847f1ab635d83f48b8b5d1691749bf16b5ffd317a0d1d597cd418146eaebf0ceed758e8b8f8f8f42604051610f9096959493929190612552565b60405180910390a45050600160005598975050505050505050565b600080516020612621833981519152610fc381611b97565b6127108211156110155760405162461bcd60e51b815260206004820152601a60248201527f496e76616c696420626173697320706f696e74732076616c756500000000000060448201526064016105c6565b50600555565b60008051602061262183398151915261103381611b97565b6107ee611d29565b60009182526001602090815260408084206001600160a01b0393909316845291905290205460ff1690565b61106e611ba1565b611076611bc7565b60008051602061262183398151915261108e81611b97565b600083815260066020526040812080549091036110bd5760405162461bcd60e51b81526004016105c69061234e565b600d810154610100900460ff1661110d5760405162461bcd60e51b8152602060048201526014602482015273119d5b991cc8185c99481b9bdd081cdd185ad95960621b60448201526064016105c6565b600083116111695760405162461bcd60e51b8152602060048201526024808201527f52657761726420616d6f756e74206d75737420626520677265617465722074686044820152630616e20360e41b60648201526084016105c6565b8234146111c45760405162461bcd60e51b815260206004820152602360248201527f53656e742076616c7565206d757374206d617463682072657761726420616d6f6044820152621d5b9d60ea1b60648201526084016105c6565b6000612710600554856111d791906125ab565b6111e191906125c2565b905060006111ef82866125e4565b6004546040519192506001600160a01b03169082156108fc029083906000818181858888f1935050505015801561122a573d6000803e3d6000fd5b5060408051868152602081018390524281830152905187917fc32f739c1dcfb8a3377ffb21f6faf00e0f2ca2904817604198994c8ca9672b95919081900360600190a2505050506106426001600055565b611283611dc2565b6000828152600660208181526040928390208351610200810185528154815260018201546001600160a01b03908116938201939093526002820154909216938201939093526003830154606082015260048301546080820152600583015460a08201529082015460c0820152600782015460e082015260088201805491929161010084019190611312906123c8565b80601f016020809104026020016040519081016040528092919081815260200182805461133e906123c8565b801561138b5780601f106113605761010080835404028352916020019161138b565b820191906000526020600020905b81548152906001019060200180831161136e57829003601f168201915b505050505081526020016009820180546113a4906123c8565b80601f01602080910402602001604051908101604052809291908181526020018280546113d0906123c8565b801561141d5780601f106113f25761010080835404028352916020019161141d565b820191906000526020600020905b81548152906001019060200180831161140057829003601f168201915b50505050508152602001600a82018054611436906123c8565b80601f0160208091040260200160405190810160405280929190818152602001828054611462906123c8565b80156114af5780601f10611484576101008083540402835291602001916114af565b820191906000526020600020905b81548152906001019060200180831161149257829003601f168201915b5050509183525050600b82015460209091019060ff1660038111156114d6576114d661219b565b60038111156114e7576114e761219b565b8152600c8201546020820152600d9091015460ff8082161515604084015261010082048116151560608401526201000090910416151560809091015292915050565b6000828152600160208190526040909120015461154581611b97565b6108178383611c6a565b611557611ba1565b61155f611bc7565b60008051602061262183398151915261157781611b97565b600082815260066020526040812080549091036115a65760405162461bcd60e51b81526004016105c69061234e565b6001600b82015460ff1660038111156115c1576115c161219b565b1461160e5760405162461bcd60e51b815260206004820152601d60248201527f43726f776466756e64696e67206973206e6f7420636f6d706c6574656400000060448201526064016105c6565b600081600c0154116116625760405162461bcd60e51b815260206004820152601860248201527f4e6f206578636573732066756e647320746f207374616b65000000000000000060448201526064016105c6565b600d810154610100900460ff16156116bc5760405162461bcd60e51b815260206004820152601860248201527f46756e64732061726520616c7265616479207374616b6564000000000000000060448201526064016105c6565b600d01805461ff001916610100179055506107ee6001600055565b6116df611ba1565b6116e7611bc7565b600082815260066020526040812080549091036117165760405162461bcd60e51b81526004016105c69061234e565b6000600b82015460ff1660038111156117315761173161219b565b1461177e5760405162461bcd60e51b815260206004820152601a60248201527f43726f776466756e64696e67206973206e6f742061637469766500000000000060448201526064016105c6565b80600601544211156117cb5760405162461bcd60e51b815260206004820152601660248201527510dc9bddd9199d5b991a5b99c81a185cc8195b99195960521b60448201526064016105c6565b6000341161181b5760405162461bcd60e51b815260206004820152601d60248201527f416d6f756e74206d7573742062652067726561746572207468616e203000000060448201526064016105c6565b6000349050808260040160008282546118349190612431565b9091555050600084815260086020908152604080832033845290915281208054839290611862908490612431565b90915550506000848152600760209081526040808320815160808101835233815280840186815292810188815242606083015282546001808201855593875294909520815160049095020180546001600160a01b0319166001600160a01b03909516949094178455915190830155915160028201906118e19082612492565b50606082015181600301555050816003015482600401541015801561190b5750600d82015460ff16155b1561199857600b820180546001919060ff191682800217905550600d8201805460ff191660011790556003820154600483015461194891906125e4565b600c830181905560048301546040805191825260208201929092524281830152905185917f171bd863408359d082f5d81ada1ffab03ad73d54cbc4f033449d56d2c7c9fb51919081900360600190a25b336001600160a01b0316847f83c8bbf87f99ccd8ecd13249a73a5902c0bf4cede5b62350f998b5f5af2c8d8d8386426040516119d6939291906125f7565b60405180910390a350506106426001600055565b6119f2611ba1565b6119fa611bc7565b600080516020612621833981519152611a1281611b97565b60008281526006602052604081208054909103611a415760405162461bcd60e51b81526004016105c69061234e565b80600601544211611a945760405162461bcd60e51b815260206004820152601e60248201527f43726f776466756e64696e6720686173206e6f7420656e64656420796574000060448201526064016105c6565b8060030154816004015410611abb5760405162461bcd60e51b81526004016105c690612385565b600d81015462010000900460ff1615611b0d5760405162461bcd60e51b815260206004820152601460248201527346756e6473206172652072657475726e61626c6560601b60448201526064016105c6565b600b8101805460ff1916600317905560048054908201546040516001600160a01b03909216916108fc82150291906000818181858888f19350505050158015611b5a573d6000803e3d6000fd5b5060048101546040805191825242602083015284917f239f816b2f48cb486d6fb0707bd581965e917af2ba557c18e14d1849df4c460e9101610ad9565b6107ee8133611d66565b60025460ff1615611bc55760405163d93c066560e01b815260040160405180910390fd5b565b600260005403611bea57604051633ee5aeb560e01b815260040160405180910390fd5b6002600055565b6000611bfd838361103b565b611c625760008381526001602081815260408084206001600160a01b0387168086529252808420805460ff19169093179092559051339286917f2f8788117e7eff1d82e926ec794901d17c78024a50270940304540a733656f0d9190a4506001610556565b506000610556565b6000611c76838361103b565b15611c625760008381526001602090815260408083206001600160a01b0386168085529252808320805460ff1916905551339286917ff6391f5c32d9c69d2a47ea670b442974b53935d1edc7fd64eb21e047a839171b9190a4506001610556565b611cdf611d9f565b6002805460ff191690557f5db9ee0a495bf2e6ff9c91a7834c1ba4fdd244a5e8aa4e537bd38aeae4b073aa335b6040516001600160a01b03909116815260200160405180910390a1565b611d31611ba1565b6002805460ff191660011790557f62e78cea01bee320cd4e420270b5ea74000d11b0c9f74754ebdbfc544b05a258611d0c3390565b611d70828261103b565b6106425760405163e2517d3f60e01b81526001600160a01b0382166004820152602481018390526044016105c6565b60025460ff16611bc557604051638dfc202b60e01b815260040160405180910390fd5b6040518061020001604052806000815260200160006001600160a01b0316815260200160006001600160a01b03168152602001600081526020016000815260200160008152602001600081526020016000815260200160608152602001606081526020016060815260200160006003811115611e4057611e4061219b565b8152600060208201819052604082018190526060820181905260809091015290565b600060208284031215611e7457600080fd5b81356001600160e01b031981168114611e8c57600080fd5b9392505050565b80356001600160a01b0381168114611eaa57600080fd5b919050565b600060208284031215611ec157600080fd5b611e8c82611e93565b600060208284031215611edc57600080fd5b5035919050565b60008060408385031215611ef657600080fd5b82359150611f0660208401611e93565b90509250929050565b6000815180845260005b81811015611f3557602081850181015186830182015201611f19565b506000602082860101526020601f19601f83011685010191505092915050565b60006020808301818452808551808352604092508286019150828160051b87010184880160005b83811015611fde57888303603f19018552815180516001600160a01b03168452878101518885015286810151608088860181905290611fbd82870182611f0f565b60609384015196909301959095525094870194925090860190600101611f7c565b509098975050505050505050565b634e487b7160e01b600052604160045260246000fd5b600067ffffffffffffffff8084111561201d5761201d611fec565b604051601f8501601f19908116603f0116810190828211818310171561204557612045611fec565b8160405280935085815286868601111561205e57600080fd5b858560208301376000602087830101525050509392505050565b600082601f83011261208957600080fd5b611e8c83833560208501612002565b80358015158114611eaa57600080fd5b600080600080600080600060e0888a0312156120c357600080fd5b87359650602088013567ffffffffffffffff808211156120e257600080fd5b6120ee8b838c01612078565b975060408a013591508082111561210457600080fd5b6121108b838c01612078565b965060608a013591508082111561212657600080fd5b508801601f81018a1361213857600080fd5b6121478a823560208401612002565b9450506080880135925061215d60a08901611e93565b915061216b60c08901612098565b905092959891949750929550565b6000806040838503121561218c57600080fd5b50508035926020909101359150565b634e487b7160e01b600052602160045260246000fd5b600481106121cf57634e487b7160e01b600052602160045260246000fd5b9052565b6020815281516020820152600060208301516121fa60408401826001600160a01b03169052565b5060408301516001600160a01b03811660608401525060608301516080830152608083015160a083015260a083015160c083015260c083015160e083015260e08301516101008181850152808501519150506102006101208181860152612265610220860184611f0f565b9250808601519050601f196101408187860301818801526122868584611f0f565b9450808801519250506101608187860301818801526122a58584611f0f565b945080880151925050506101806122be818701836121b1565b8601516101a08681019190915286015190506101c06122e08187018315159052565b86015190506101e06122f58682018315159052565b90950151151593019290925250919050565b6000806040838503121561231a57600080fd5b82359150602083013567ffffffffffffffff81111561233857600080fd5b61234485828601612078565b9150509250929050565b6020808252601b908201527f43726f776466756e64696e6720646f6573206e6f742065786973740000000000604082015260600190565b60208082526023908201527f43726f776466756e64696e67206861732072656163686564206974732074617260408201526219d95d60ea1b606082015260800190565b600181811c908216806123dc57607f821691505b6020821081036123fc57634e487b7160e01b600052602260045260246000fd5b50919050565b634e487b7160e01b600052601160045260246000fd5b60006001820161242a5761242a612402565b5060010190565b8082018082111561055657610556612402565b601f82111561085057600081815260208120601f850160051c8101602086101561246b5750805b601f850160051c820191505b8181101561248a57828155600101612477565b505050505050565b815167ffffffffffffffff8111156124ac576124ac611fec565b6124c0816124ba84546123c8565b84612444565b602080601f8311600181146124f557600084156124dd5750858301515b600019600386901b1c1916600185901b17855561248a565b600085815260208120601f198616915b8281101561252457888601518255948401946001909101908401612505565b50858210156125425787850151600019600388901b60f8161c191681555b5050505050600190811b01905550565b86815285602082015260c06040820152600061257160c0830187611f0f565b82810360608401526125838187611f0f565b905082810360808401526125978186611f0f565b9150508260a0830152979650505050505050565b808202811582820484141761055657610556612402565b6000826125df57634e487b7160e01b600052601260045260246000fd5b500490565b8181038181111561055657610556612402565b8381526060602082015260006126106060830185611f0f565b905082604083015294935050505056fea49807205ce4d355092ef5a8a18f56e8913cf4a201fbe287825b095693c21775a26469706673582212203f2222121de3c99bc8802bb7e0c38c3fbacdca070eeeec022b885e5b4f369eac64736f6c63430008140033",
+  "deployedBytecode": "0x6080604052600436106101855760003560e01c8063746255c8116100d1578063cc4f0e7d1161008a578063d8e9724611610064578063d8e97246146104bc578063d968e9fc146104d2578063dc1780ea146104f2578063ea0ebc0c1461050557600080fd5b8063cc4f0e7d1461045c578063d3bb0b7d1461046f578063d547741f1461049c57600080fd5b8063746255c81461039857806375b238fc146103b85780638456cb59146103da57806391d14854146103ef578063a217fddf1461040f578063afcf2fc41461042457600080fd5b80633f4ba83a1161013e578063566264ad11610118578063566264ad146102ff5780635af24c381461032c5780635c975abb1461034c5780636f0c80671461036457600080fd5b80633f4ba83a1461028757806345755dd61461029c5780635117e338146102bc57600080fd5b806301ffc9a7146101915780630c9be46d146101c6578063155dd5ee146101e8578063248a9ca3146102085780632f2ff15d1461024757806336568abe1461026757600080fd5b3661018c57005b600080fd5b34801561019d57600080fd5b506101b16101ac366004611e62565b610525565b60405190151581526020015b60405180910390f35b3480156101d257600080fd5b506101e66101e1366004611eaf565b61055c565b005b3480156101f457600080fd5b506101e6610203366004611eca565b610646565b34801561021457600080fd5b50610239610223366004611eca565b6000908152600160208190526040909120015490565b6040519081526020016101bd565b34801561025357600080fd5b506101e6610262366004611ee3565b6107f1565b34801561027357600080fd5b506101e6610282366004611ee3565b61081d565b34801561029357600080fd5b506101e6610855565b3480156102a857600080fd5b506101e66102b7366004611eca565b610875565b3480156102c857600080fd5b506102396102d7366004611ee3565b60009182526008602090815260408084206001600160a01b0393909316845291905290205490565b34801561030b57600080fd5b5061031f61031a366004611eca565b610aee565b6040516101bd9190611f55565b34801561033857600080fd5b506102396103473660046120a8565b610c1c565b34801561035857600080fd5b5060025460ff166101b1565b34801561037057600080fd5b506102397f838cb9e68162e54d2dfda44baa96273d8a6cb729c0d42995215e0f52841feb7781565b3480156103a457600080fd5b506101e66103b3366004611eca565b610fab565b3480156103c457600080fd5b5061023960008051602061262183398151915281565b3480156103e657600080fd5b506101e661101b565b3480156103fb57600080fd5b506101b161040a366004611ee3565b61103b565b34801561041b57600080fd5b50610239600081565b34801561043057600080fd5b50600454610444906001600160a01b031681565b6040516001600160a01b0390911681526020016101bd565b6101e661046a366004612179565b611066565b34801561047b57600080fd5b5061048f61048a366004611eca565b61127b565b6040516101bd91906121d3565b3480156104a857600080fd5b506101e66104b7366004611ee3565b611529565b3480156104c857600080fd5b5061023960055481565b3480156104de57600080fd5b506101e66104ed366004611eca565b61154f565b6101e6610500366004612307565b6116d7565b34801561051157600080fd5b506101e6610520366004611eca565b6119ea565b60006001600160e01b03198216637965db0b60e01b148061055657506301ffc9a760e01b6001600160e01b03198316145b92915050565b60008051602061262183398151915261057481611b97565b6001600160a01b0382166105cf5760405162461bcd60e51b815260206004820152601760248201527f496e76616c69642063686172697479206164647265737300000000000000000060448201526064015b60405180910390fd5b600480546001600160a01b0319166001600160a01b038416908117909155610618907f838cb9e68162e54d2dfda44baa96273d8a6cb729c0d42995215e0f52841feb7790611529565b6106427f838cb9e68162e54d2dfda44baa96273d8a6cb729c0d42995215e0f52841feb77836107f1565b5050565b61064e611ba1565b610656611bc7565b600081815260066020526040812080549091036106855760405162461bcd60e51b81526004016105c69061234e565b60028101546001600160a01b031633146106ed5760405162461bcd60e51b815260206004820152602360248201527f4f6e6c792062656e65666963696172792063616e2077697468647261772066756044820152626e647360e81b60648201526084016105c6565b6001600b82015460ff1660038111156107085761070861219b565b146107555760405162461bcd60e51b815260206004820152601d60248201527f43726f776466756e64696e67206973206e6f7420636f6d706c6574656400000060448201526064016105c6565b600381015460028201546040516001600160a01b039091169082156108fc029083906000818181858888f19350505050158015610796573d6000803e3d6000fd5b506002820154604080518381524260208201526001600160a01b039092169185917f3dbb1a26f29aef1264c12ca1285deb60cca5666d8b17100c7ea1602c0a4014f6910160405180910390a350506107ee6001600055565b50565b6000828152600160208190526040909120015461080d81611b97565b6108178383611bf1565b50505050565b6001600160a01b03811633146108465760405163334bd91960e11b815260040160405180910390fd5b6108508282611c6a565b505050565b60008051602061262183398151915261086d81611b97565b6107ee611cd7565b61087d611ba1565b610885611bc7565b600081815260066020526040812080549091036108b45760405162461bcd60e51b81526004016105c69061234e565b806006015442116109075760405162461bcd60e51b815260206004820152601e60248201527f43726f776466756e64696e6720686173206e6f7420656e64656420796574000060448201526064016105c6565b806003015481600401541061092e5760405162461bcd60e51b81526004016105c690612385565b600d81015462010000900460ff166109885760405162461bcd60e51b815260206004820152601860248201527f46756e647320617265206e6f742072657475726e61626c65000000000000000060448201526064016105c6565b6000828152600860209081526040808320338452909152902054806109ef5760405162461bcd60e51b815260206004820152601960248201527f4e6f20636f6e747269627574696f6e20746f2072657475726e0000000000000060448201526064016105c6565b600b8201805460ff1916600317905560008381526008602090815260408083203380855292528083208390555190916108fc841502918491818181858888f19350505050158015610a44573d6000803e3d6000fd5b5060408051828152426020820152339185917f3968e2c40e1b827d86bdc4f65e7c409742d76e04f79fbed74433153e595df647910160405180910390a36003600b83015460ff166003811115610a9c57610a9c61219b565b14610ae25760048201546040805191825242602083015284917f239f816b2f48cb486d6fb0707bd581965e917af2ba557c18e14d1849df4c460e91015b60405180910390a25b50506107ee6001600055565b606060076000838152602001908152602001600020805480602002602001604051908101604052809291908181526020016000905b82821015610c11576000848152602090819020604080516080810182526004860290920180546001600160a01b0316835260018101549383019390935260028301805492939291840191610b76906123c8565b80601f0160208091040260200160405190810160405280929190818152602001828054610ba2906123c8565b8015610bef5780601f10610bc457610100808354040283529160200191610bef565b820191906000526020600020905b815481529060010190602001808311610bd257829003601f168201915b5050505050815260200160038201548152505081526020019060010190610b23565b505050509050919050565b6000610c26611ba1565b610c2e611bc7565b60008811610c8a5760405162461bcd60e51b8152602060048201526024808201527f54617267657420616d6f756e74206d75737420626520677265617465722074686044820152630616e20360e41b60648201526084016105c6565b60008411610cda5760405162461bcd60e51b815260206004820152601f60248201527f4475726174696f6e206d7573742062652067726561746572207468616e20300060448201526064016105c6565b6001600160a01b038316610d305760405162461bcd60e51b815260206004820152601b60248201527f496e76616c69642062656e65666963696172792061646472657373000000000060448201526064016105c6565b60038054906000610d4083612418565b9091555050600354426000610d558783612431565b9050604051806102000160405280848152602001336001600160a01b03168152602001876001600160a01b031681526020018c8152602001600081526020018381526020018281526020018881526020018b81526020018a815260200189815260200160006003811115610dcb57610dcb61219b565b815260006020808301829052604080840183905260608085018490528a151560809586015288845260068084529382902086518155928601516001840180546001600160a01b03199081166001600160a01b039384161790915592870151600285018054909416911617909155840151600382015591830151600483015560a0830151600583015560c08301519082015560e082015160078201556101008201516008820190610e7b9082612492565b506101208201516009820190610e919082612492565b50610140820151600a820190610ea79082612492565b50610160820151600b8201805460ff19166001836003811115610ecc57610ecc61219b565b021790555061018082015181600c01556101a082015181600d0160006101000a81548160ff0219169083151502179055506101c082015181600d0160016101000a81548160ff0219169083151502179055506101e082015181600d0160026101000a81548160ff021916908315150217905550905050856001600160a01b0316336001600160a01b0316847f1ab635d83f48b8b5d1691749bf16b5ffd317a0d1d597cd418146eaebf0ceed758e8b8f8f8f42604051610f9096959493929190612552565b60405180910390a45050600160005598975050505050505050565b600080516020612621833981519152610fc381611b97565b6127108211156110155760405162461bcd60e51b815260206004820152601a60248201527f496e76616c696420626173697320706f696e74732076616c756500000000000060448201526064016105c6565b50600555565b60008051602061262183398151915261103381611b97565b6107ee611d29565b60009182526001602090815260408084206001600160a01b0393909316845291905290205460ff1690565b61106e611ba1565b611076611bc7565b60008051602061262183398151915261108e81611b97565b600083815260066020526040812080549091036110bd5760405162461bcd60e51b81526004016105c69061234e565b600d810154610100900460ff1661110d5760405162461bcd60e51b8152602060048201526014602482015273119d5b991cc8185c99481b9bdd081cdd185ad95960621b60448201526064016105c6565b600083116111695760405162461bcd60e51b8152602060048201526024808201527f52657761726420616d6f756e74206d75737420626520677265617465722074686044820152630616e20360e41b60648201526084016105c6565b8234146111c45760405162461bcd60e51b815260206004820152602360248201527f53656e742076616c7565206d757374206d617463682072657761726420616d6f6044820152621d5b9d60ea1b60648201526084016105c6565b6000612710600554856111d791906125ab565b6111e191906125c2565b905060006111ef82866125e4565b6004546040519192506001600160a01b03169082156108fc029083906000818181858888f1935050505015801561122a573d6000803e3d6000fd5b5060408051868152602081018390524281830152905187917fc32f739c1dcfb8a3377ffb21f6faf00e0f2ca2904817604198994c8ca9672b95919081900360600190a2505050506106426001600055565b611283611dc2565b6000828152600660208181526040928390208351610200810185528154815260018201546001600160a01b03908116938201939093526002820154909216938201939093526003830154606082015260048301546080820152600583015460a08201529082015460c0820152600782015460e082015260088201805491929161010084019190611312906123c8565b80601f016020809104026020016040519081016040528092919081815260200182805461133e906123c8565b801561138b5780601f106113605761010080835404028352916020019161138b565b820191906000526020600020905b81548152906001019060200180831161136e57829003601f168201915b505050505081526020016009820180546113a4906123c8565b80601f01602080910402602001604051908101604052809291908181526020018280546113d0906123c8565b801561141d5780601f106113f25761010080835404028352916020019161141d565b820191906000526020600020905b81548152906001019060200180831161140057829003601f168201915b50505050508152602001600a82018054611436906123c8565b80601f0160208091040260200160405190810160405280929190818152602001828054611462906123c8565b80156114af5780601f10611484576101008083540402835291602001916114af565b820191906000526020600020905b81548152906001019060200180831161149257829003601f168201915b5050509183525050600b82015460209091019060ff1660038111156114d6576114d661219b565b60038111156114e7576114e761219b565b8152600c8201546020820152600d9091015460ff8082161515604084015261010082048116151560608401526201000090910416151560809091015292915050565b6000828152600160208190526040909120015461154581611b97565b6108178383611c6a565b611557611ba1565b61155f611bc7565b60008051602061262183398151915261157781611b97565b600082815260066020526040812080549091036115a65760405162461bcd60e51b81526004016105c69061234e565b6001600b82015460ff1660038111156115c1576115c161219b565b1461160e5760405162461bcd60e51b815260206004820152601d60248201527f43726f776466756e64696e67206973206e6f7420636f6d706c6574656400000060448201526064016105c6565b600081600c0154116116625760405162461bcd60e51b815260206004820152601860248201527f4e6f206578636573732066756e647320746f207374616b65000000000000000060448201526064016105c6565b600d810154610100900460ff16156116bc5760405162461bcd60e51b815260206004820152601860248201527f46756e64732061726520616c7265616479207374616b6564000000000000000060448201526064016105c6565b600d01805461ff001916610100179055506107ee6001600055565b6116df611ba1565b6116e7611bc7565b600082815260066020526040812080549091036117165760405162461bcd60e51b81526004016105c69061234e565b6000600b82015460ff1660038111156117315761173161219b565b1461177e5760405162461bcd60e51b815260206004820152601a60248201527f43726f776466756e64696e67206973206e6f742061637469766500000000000060448201526064016105c6565b80600601544211156117cb5760405162461bcd60e51b815260206004820152601660248201527510dc9bddd9199d5b991a5b99c81a185cc8195b99195960521b60448201526064016105c6565b6000341161181b5760405162461bcd60e51b815260206004820152601d60248201527f416d6f756e74206d7573742062652067726561746572207468616e203000000060448201526064016105c6565b6000349050808260040160008282546118349190612431565b9091555050600084815260086020908152604080832033845290915281208054839290611862908490612431565b90915550506000848152600760209081526040808320815160808101835233815280840186815292810188815242606083015282546001808201855593875294909520815160049095020180546001600160a01b0319166001600160a01b03909516949094178455915190830155915160028201906118e19082612492565b50606082015181600301555050816003015482600401541015801561190b5750600d82015460ff16155b1561199857600b820180546001919060ff191682800217905550600d8201805460ff191660011790556003820154600483015461194891906125e4565b600c830181905560048301546040805191825260208201929092524281830152905185917f171bd863408359d082f5d81ada1ffab03ad73d54cbc4f033449d56d2c7c9fb51919081900360600190a25b336001600160a01b0316847f83c8bbf87f99ccd8ecd13249a73a5902c0bf4cede5b62350f998b5f5af2c8d8d8386426040516119d6939291906125f7565b60405180910390a350506106426001600055565b6119f2611ba1565b6119fa611bc7565b600080516020612621833981519152611a1281611b97565b60008281526006602052604081208054909103611a415760405162461bcd60e51b81526004016105c69061234e565b80600601544211611a945760405162461bcd60e51b815260206004820152601e60248201527f43726f776466756e64696e6720686173206e6f7420656e64656420796574000060448201526064016105c6565b8060030154816004015410611abb5760405162461bcd60e51b81526004016105c690612385565b600d81015462010000900460ff1615611b0d5760405162461bcd60e51b815260206004820152601460248201527346756e6473206172652072657475726e61626c6560601b60448201526064016105c6565b600b8101805460ff1916600317905560048054908201546040516001600160a01b03909216916108fc82150291906000818181858888f19350505050158015611b5a573d6000803e3d6000fd5b5060048101546040805191825242602083015284917f239f816b2f48cb486d6fb0707bd581965e917af2ba557c18e14d1849df4c460e9101610ad9565b6107ee8133611d66565b60025460ff1615611bc55760405163d93c066560e01b815260040160405180910390fd5b565b600260005403611bea57604051633ee5aeb560e01b815260040160405180910390fd5b6002600055565b6000611bfd838361103b565b611c625760008381526001602081815260408084206001600160a01b0387168086529252808420805460ff19169093179092559051339286917f2f8788117e7eff1d82e926ec794901d17c78024a50270940304540a733656f0d9190a4506001610556565b506000610556565b6000611c76838361103b565b15611c625760008381526001602090815260408083206001600160a01b0386168085529252808320805460ff1916905551339286917ff6391f5c32d9c69d2a47ea670b442974b53935d1edc7fd64eb21e047a839171b9190a4506001610556565b611cdf611d9f565b6002805460ff191690557f5db9ee0a495bf2e6ff9c91a7834c1ba4fdd244a5e8aa4e537bd38aeae4b073aa335b6040516001600160a01b03909116815260200160405180910390a1565b611d31611ba1565b6002805460ff191660011790557f62e78cea01bee320cd4e420270b5ea74000d11b0c9f74754ebdbfc544b05a258611d0c3390565b611d70828261103b565b6106425760405163e2517d3f60e01b81526001600160a01b0382166004820152602481018390526044016105c6565b60025460ff16611bc557604051638dfc202b60e01b815260040160405180910390fd5b6040518061020001604052806000815260200160006001600160a01b0316815260200160006001600160a01b03168152602001600081526020016000815260200160008152602001600081526020016000815260200160608152602001606081526020016060815260200160006003811115611e4057611e4061219b565b8152600060208201819052604082018190526060820181905260809091015290565b600060208284031215611e7457600080fd5b81356001600160e01b031981168114611e8c57600080fd5b9392505050565b80356001600160a01b0381168114611eaa57600080fd5b919050565b600060208284031215611ec157600080fd5b611e8c82611e93565b600060208284031215611edc57600080fd5b5035919050565b60008060408385031215611ef657600080fd5b82359150611f0660208401611e93565b90509250929050565b6000815180845260005b81811015611f3557602081850181015186830182015201611f19565b506000602082860101526020601f19601f83011685010191505092915050565b60006020808301818452808551808352604092508286019150828160051b87010184880160005b83811015611fde57888303603f19018552815180516001600160a01b03168452878101518885015286810151608088860181905290611fbd82870182611f0f565b60609384015196909301959095525094870194925090860190600101611f7c565b509098975050505050505050565b634e487b7160e01b600052604160045260246000fd5b600067ffffffffffffffff8084111561201d5761201d611fec565b604051601f8501601f19908116603f0116810190828211818310171561204557612045611fec565b8160405280935085815286868601111561205e57600080fd5b858560208301376000602087830101525050509392505050565b600082601f83011261208957600080fd5b611e8c83833560208501612002565b80358015158114611eaa57600080fd5b600080600080600080600060e0888a0312156120c357600080fd5b87359650602088013567ffffffffffffffff808211156120e257600080fd5b6120ee8b838c01612078565b975060408a013591508082111561210457600080fd5b6121108b838c01612078565b965060608a013591508082111561212657600080fd5b508801601f81018a1361213857600080fd5b6121478a823560208401612002565b9450506080880135925061215d60a08901611e93565b915061216b60c08901612098565b905092959891949750929550565b6000806040838503121561218c57600080fd5b50508035926020909101359150565b634e487b7160e01b600052602160045260246000fd5b600481106121cf57634e487b7160e01b600052602160045260246000fd5b9052565b6020815281516020820152600060208301516121fa60408401826001600160a01b03169052565b5060408301516001600160a01b03811660608401525060608301516080830152608083015160a083015260a083015160c083015260c083015160e083015260e08301516101008181850152808501519150506102006101208181860152612265610220860184611f0f565b9250808601519050601f196101408187860301818801526122868584611f0f565b9450808801519250506101608187860301818801526122a58584611f0f565b945080880151925050506101806122be818701836121b1565b8601516101a08681019190915286015190506101c06122e08187018315159052565b86015190506101e06122f58682018315159052565b90950151151593019290925250919050565b6000806040838503121561231a57600080fd5b82359150602083013567ffffffffffffffff81111561233857600080fd5b61234485828601612078565b9150509250929050565b6020808252601b908201527f43726f776466756e64696e6720646f6573206e6f742065786973740000000000604082015260600190565b60208082526023908201527f43726f776466756e64696e67206861732072656163686564206974732074617260408201526219d95d60ea1b606082015260800190565b600181811c908216806123dc57607f821691505b6020821081036123fc57634e487b7160e01b600052602260045260246000fd5b50919050565b634e487b7160e01b600052601160045260246000fd5b60006001820161242a5761242a612402565b5060010190565b8082018082111561055657610556612402565b601f82111561085057600081815260208120601f850160051c8101602086101561246b5750805b601f850160051c820191505b8181101561248a57828155600101612477565b505050505050565b815167ffffffffffffffff8111156124ac576124ac611fec565b6124c0816124ba84546123c8565b84612444565b602080601f8311600181146124f557600084156124dd5750858301515b600019600386901b1c1916600185901b17855561248a565b600085815260208120601f198616915b8281101561252457888601518255948401946001909101908401612505565b50858210156125425787850151600019600388901b60f8161c191681555b5050505050600190811b01905550565b86815285602082015260c06040820152600061257160c0830187611f0f565b82810360608401526125838187611f0f565b905082810360808401526125978186611f0f565b9150508260a0830152979650505050505050565b808202811582820484141761055657610556612402565b6000826125df57634e487b7160e01b600052601260045260246000fd5b500490565b8181038181111561055657610556612402565b8381526060602082015260006126106060830185611f0f565b905082604083015294935050505056fea49807205ce4d355092ef5a8a18f56e8913cf4a201fbe287825b095693c21775a26469706673582212203f2222121de3c99bc8802bb7e0c38c3fbacdca070eeeec022b885e5b4f369eac64736f6c63430008140033",
+  "devdoc": {
+    "details": "众筹合约实现，适用于Monad区块链，使用原生MON代币 简化版本，不包含代理模式相关代码",
+    "errors": {
+      "AccessControlBadConfirmation()": [
+        {
+          "details": "The caller of a function is not the expected one. NOTE: Don't confuse with {AccessControlUnauthorizedAccount}."
+        }
+      ],
+      "AccessControlUnauthorizedAccount(address,bytes32)": [
+        {
+          "details": "The `account` is missing a role."
+        }
+      ],
+      "EnforcedPause()": [
+        {
+          "details": "The operation failed because the contract is paused."
+        }
+      ],
+      "ExpectedPause()": [
+        {
+          "details": "The operation failed because the contract is not paused."
+        }
+      ],
+      "ReentrancyGuardReentrantCall()": [
+        {
+          "details": "Unauthorized reentrant call."
+        }
+      ]
+    },
+    "events": {
+      "CrowdfundingCompleted(uint256,uint256,uint256,uint256)": {
+        "details": "众筹完成事件"
+      },
+      "CrowdfundingCreated(uint256,address,address,uint256,uint256,string,string,bytes,uint256)": {
+        "details": "众筹创建事件"
+      },
+      "CrowdfundingExpired(uint256,uint256,uint256)": {
+        "details": "众筹过期事件"
+      },
+      "CrowdfundingParticipated(uint256,address,uint256,string,uint256)": {
+        "details": "众筹参与事件"
+      },
+      "FundsReturned(uint256,address,uint256,uint256)": {
+        "details": "资金退回事件"
+      },
+      "FundsWithdrawn(uint256,address,uint256,uint256)": {
+        "details": "资金提取事件"
+      },
+      "Paused(address)": {
+        "details": "Emitted when the pause is triggered by `account`."
+      },
+      "RoleAdminChanged(bytes32,bytes32,bytes32)": {
+        "details": "Emitted when `newAdminRole` is set as ``role``'s admin role, replacing `previousAdminRole` `DEFAULT_ADMIN_ROLE` is the starting admin for all roles, despite {RoleAdminChanged} not being emitted to signal this."
+      },
+      "RoleGranted(bytes32,address,address)": {
+        "details": "Emitted when `account` is granted `role`. `sender` is the account that originated the contract call. This account bears the admin role (for the granted role). Expected in cases where the role was granted using the internal {AccessControl-_grantRole}."
+      },
+      "RoleRevoked(bytes32,address,address)": {
+        "details": "Emitted when `account` is revoked `role`. `sender` is the account that originated the contract call:   - if using `revokeRole`, it is the admin role bearer   - if using `renounceRole`, it is the role bearer (i.e. `account`)"
+      },
+      "StakingRewardDistributed(uint256,uint256,uint256,uint256)": {
+        "details": "质押收益事件"
+      },
+      "Unpaused(address)": {
+        "details": "Emitted when the pause is lifted by `account`."
+      }
+    },
+    "kind": "dev",
+    "methods": {
+      "constructor": {
+        "details": "构造函数",
+        "params": {
+          "_charityAddress": "慈善地址"
+        }
+      },
+      "createCrowdfunding(uint256,string,string,bytes,uint256,address,bool)": {
+        "details": "创建众筹",
+        "params": {
+          "_beneficiary": "受益人地址",
+          "_description": "描述",
+          "_duration": "持续时间（秒）",
+          "_imageData": "图片数据",
+          "_returnOnExpire": "过期是否退回资金",
+          "_targetAmount": "目标金额",
+          "_title": "标题"
+        },
+        "returns": {
+          "_0": "crowdfundingId 众筹ID"
+        }
+      },
+      "distributeStakingRewards(uint256,uint256)": {
+        "details": "分配质押收益（管理员调用）",
+        "params": {
+          "_crowdfundingId": "众筹ID",
+          "_rewardAmount": "收益金额 注意：收益金额通过msg.value传入，使用原生MON代币"
+        }
+      },
+      "getCrowdfundingInfo(uint256)": {
+        "details": "获取众筹信息",
+        "params": {
+          "_crowdfundingId": "众筹ID"
+        },
+        "returns": {
+          "_0": "众筹信息"
+        }
+      },
+      "getParticipationRecords(uint256)": {
+        "details": "获取参与记录",
+        "params": {
+          "_crowdfundingId": "众筹ID"
+        },
+        "returns": {
+          "_0": "参与记录数组"
+        }
+      },
+      "getRoleAdmin(bytes32)": {
+        "details": "Returns the admin role that controls `role`. See {grantRole} and {revokeRole}. To change a role's admin, use {_setRoleAdmin}."
+      },
+      "getUserContribution(uint256,address)": {
+        "details": "获取用户在特定众筹中的参与金额",
+        "params": {
+          "_crowdfundingId": "众筹ID",
+          "_participant": "参与者地址"
+        },
+        "returns": {
+          "_0": "参与金额"
+        }
+      },
+      "grantRole(bytes32,address)": {
+        "details": "Grants `role` to `account`. If `account` had not been already granted `role`, emits a {RoleGranted} event. Requirements: - the caller must have ``role``'s admin role. May emit a {RoleGranted} event."
+      },
+      "hasRole(bytes32,address)": {
+        "details": "Returns `true` if `account` has been granted `role`."
+      },
+      "participateInCrowdfunding(uint256,string)": {
+        "details": "参与众筹",
+        "params": {
+          "_crowdfundingId": "众筹ID",
+          "_message": "留言 注意：参与金额通过msg.value传入，使用原生MON代币"
+        }
+      },
+      "pause()": {
+        "details": "暂停合约"
+      },
+      "paused()": {
+        "details": "Returns true if the contract is paused, and false otherwise."
+      },
+      "renounceRole(bytes32,address)": {
+        "details": "Revokes `role` from the calling account. Roles are often managed via {grantRole} and {revokeRole}: this function's purpose is to provide a mechanism for accounts to lose their privileges if they are compromised (such as when a trusted device is misplaced). If the calling account had been revoked `role`, emits a {RoleRevoked} event. Requirements: - the caller must be `callerConfirmation`. May emit a {RoleRevoked} event."
+      },
+      "returnFunds(uint256)": {
+        "details": "退回资金（众筹过期且设置为退回时，参与者调用）",
+        "params": {
+          "_crowdfundingId": "众筹ID"
+        }
+      },
+      "revokeRole(bytes32,address)": {
+        "details": "Revokes `role` from `account`. If `account` had been granted `role`, emits a {RoleRevoked} event. Requirements: - the caller must have ``role``'s admin role. May emit a {RoleRevoked} event."
+      },
+      "setCharityAddress(address)": {
+        "details": "设置慈善地址",
+        "params": {
+          "_charityAddress": "新的慈善地址"
+        }
+      },
+      "setCharityStaffSalaryBps(uint256)": {
+        "details": "设置慈善员工工资比例",
+        "params": {
+          "_charityStaffSalaryBps": "新的慈善员工工资比例"
+        }
+      },
+      "stakeExcessFunds(uint256)": {
+        "details": "质押超额资金（管理员调用）",
+        "params": {
+          "_crowdfundingId": "众筹ID"
+        }
+      },
+      "supportsInterface(bytes4)": {
+        "details": "Returns true if this contract implements the interface defined by `interfaceId`. See the corresponding https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[ERC section] to learn more about how these ids are created. This function call must use less than 30 000 gas."
+      },
+      "transferExpiredFundsToCharity(uint256)": {
+        "details": "将过期众筹资金转移到慈善地址（管理员调用）",
+        "params": {
+          "_crowdfundingId": "众筹ID"
+        }
+      },
+      "unpause()": {
+        "details": "恢复合约"
+      },
+      "withdrawFunds(uint256)": {
+        "details": "提取众筹资金（受益人调用）",
+        "params": {
+          "_crowdfundingId": "众筹ID"
+        }
+      }
+    },
+    "title": "Crowdfunding",
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 528,
+        "contract": "contracts/crowdfunding/Crowdfunding.sol:Crowdfunding",
+        "label": "_status",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 27,
+        "contract": "contracts/crowdfunding/Crowdfunding.sol:Crowdfunding",
+        "label": "_roles",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_mapping(t_bytes32,t_struct(RoleData)22_storage)"
+      },
+      {
+        "astId": 418,
+        "contract": "contracts/crowdfunding/Crowdfunding.sol:Crowdfunding",
+        "label": "_paused",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_bool"
+      },
+      {
+        "astId": 649,
+        "contract": "contracts/crowdfunding/Crowdfunding.sol:Crowdfunding",
+        "label": "_crowdfundingIdCounter",
+        "offset": 0,
+        "slot": "3",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 651,
+        "contract": "contracts/crowdfunding/Crowdfunding.sol:Crowdfunding",
+        "label": "charityAddress",
+        "offset": 0,
+        "slot": "4",
+        "type": "t_address"
+      },
+      {
+        "astId": 654,
+        "contract": "contracts/crowdfunding/Crowdfunding.sol:Crowdfunding",
+        "label": "charityStaffSalaryBps",
+        "offset": 0,
+        "slot": "5",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 659,
+        "contract": "contracts/crowdfunding/Crowdfunding.sol:Crowdfunding",
+        "label": "_crowdfundings",
+        "offset": 0,
+        "slot": "6",
+        "type": "t_mapping(t_uint256,t_struct(Crowdfunding)1543_storage)"
+      },
+      {
+        "astId": 665,
+        "contract": "contracts/crowdfunding/Crowdfunding.sol:Crowdfunding",
+        "label": "_participations",
+        "offset": 0,
+        "slot": "7",
+        "type": "t_mapping(t_uint256,t_array(t_struct(Participation)1553_storage)dyn_storage)"
+      },
+      {
+        "astId": 671,
+        "contract": "contracts/crowdfunding/Crowdfunding.sol:Crowdfunding",
+        "label": "_userContributions",
+        "offset": 0,
+        "slot": "8",
+        "type": "t_mapping(t_uint256,t_mapping(t_address,t_uint256))"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_array(t_struct(Participation)1553_storage)dyn_storage": {
+        "base": "t_struct(Participation)1553_storage",
+        "encoding": "dynamic_array",
+        "label": "struct ICrowdfunding.Participation[]",
+        "numberOfBytes": "32"
+      },
+      "t_bool": {
+        "encoding": "inplace",
+        "label": "bool",
+        "numberOfBytes": "1"
+      },
+      "t_bytes32": {
+        "encoding": "inplace",
+        "label": "bytes32",
+        "numberOfBytes": "32"
+      },
+      "t_bytes_storage": {
+        "encoding": "bytes",
+        "label": "bytes",
+        "numberOfBytes": "32"
+      },
+      "t_enum(CrowdfundingStatus)1508": {
+        "encoding": "inplace",
+        "label": "enum ICrowdfunding.CrowdfundingStatus",
+        "numberOfBytes": "1"
+      },
+      "t_mapping(t_address,t_bool)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => bool)",
+        "numberOfBytes": "32",
+        "value": "t_bool"
+      },
+      "t_mapping(t_address,t_uint256)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => uint256)",
+        "numberOfBytes": "32",
+        "value": "t_uint256"
+      },
+      "t_mapping(t_bytes32,t_struct(RoleData)22_storage)": {
+        "encoding": "mapping",
+        "key": "t_bytes32",
+        "label": "mapping(bytes32 => struct AccessControl.RoleData)",
+        "numberOfBytes": "32",
+        "value": "t_struct(RoleData)22_storage"
+      },
+      "t_mapping(t_uint256,t_array(t_struct(Participation)1553_storage)dyn_storage)": {
+        "encoding": "mapping",
+        "key": "t_uint256",
+        "label": "mapping(uint256 => struct ICrowdfunding.Participation[])",
+        "numberOfBytes": "32",
+        "value": "t_array(t_struct(Participation)1553_storage)dyn_storage"
+      },
+      "t_mapping(t_uint256,t_mapping(t_address,t_uint256))": {
+        "encoding": "mapping",
+        "key": "t_uint256",
+        "label": "mapping(uint256 => mapping(address => uint256))",
+        "numberOfBytes": "32",
+        "value": "t_mapping(t_address,t_uint256)"
+      },
+      "t_mapping(t_uint256,t_struct(Crowdfunding)1543_storage)": {
+        "encoding": "mapping",
+        "key": "t_uint256",
+        "label": "mapping(uint256 => struct ICrowdfunding.Crowdfunding)",
+        "numberOfBytes": "32",
+        "value": "t_struct(Crowdfunding)1543_storage"
+      },
+      "t_string_storage": {
+        "encoding": "bytes",
+        "label": "string",
+        "numberOfBytes": "32"
+      },
+      "t_struct(Crowdfunding)1543_storage": {
+        "encoding": "inplace",
+        "label": "struct ICrowdfunding.Crowdfunding",
+        "members": [
+          {
+            "astId": 1511,
+            "contract": "contracts/crowdfunding/Crowdfunding.sol:Crowdfunding",
+            "label": "id",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 1513,
+            "contract": "contracts/crowdfunding/Crowdfunding.sol:Crowdfunding",
+            "label": "creator",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_address"
+          },
+          {
+            "astId": 1515,
+            "contract": "contracts/crowdfunding/Crowdfunding.sol:Crowdfunding",
+            "label": "beneficiary",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_address"
+          },
+          {
+            "astId": 1517,
+            "contract": "contracts/crowdfunding/Crowdfunding.sol:Crowdfunding",
+            "label": "targetAmount",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 1519,
+            "contract": "contracts/crowdfunding/Crowdfunding.sol:Crowdfunding",
+            "label": "currentAmount",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 1521,
+            "contract": "contracts/crowdfunding/Crowdfunding.sol:Crowdfunding",
+            "label": "startTime",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 1523,
+            "contract": "contracts/crowdfunding/Crowdfunding.sol:Crowdfunding",
+            "label": "endTime",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 1525,
+            "contract": "contracts/crowdfunding/Crowdfunding.sol:Crowdfunding",
+            "label": "duration",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 1527,
+            "contract": "contracts/crowdfunding/Crowdfunding.sol:Crowdfunding",
+            "label": "title",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_string_storage"
+          },
+          {
+            "astId": 1529,
+            "contract": "contracts/crowdfunding/Crowdfunding.sol:Crowdfunding",
+            "label": "description",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_string_storage"
+          },
+          {
+            "astId": 1531,
+            "contract": "contracts/crowdfunding/Crowdfunding.sol:Crowdfunding",
+            "label": "imageData",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_bytes_storage"
+          },
+          {
+            "astId": 1534,
+            "contract": "contracts/crowdfunding/Crowdfunding.sol:Crowdfunding",
+            "label": "status",
+            "offset": 0,
+            "slot": "11",
+            "type": "t_enum(CrowdfundingStatus)1508"
+          },
+          {
+            "astId": 1536,
+            "contract": "contracts/crowdfunding/Crowdfunding.sol:Crowdfunding",
+            "label": "excessAmount",
+            "offset": 0,
+            "slot": "12",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 1538,
+            "contract": "contracts/crowdfunding/Crowdfunding.sol:Crowdfunding",
+            "label": "isCompleted",
+            "offset": 0,
+            "slot": "13",
+            "type": "t_bool"
+          },
+          {
+            "astId": 1540,
+            "contract": "contracts/crowdfunding/Crowdfunding.sol:Crowdfunding",
+            "label": "isStaking",
+            "offset": 1,
+            "slot": "13",
+            "type": "t_bool"
+          },
+          {
+            "astId": 1542,
+            "contract": "contracts/crowdfunding/Crowdfunding.sol:Crowdfunding",
+            "label": "returnOnExpire",
+            "offset": 2,
+            "slot": "13",
+            "type": "t_bool"
+          }
+        ],
+        "numberOfBytes": "448"
+      },
+      "t_struct(Participation)1553_storage": {
+        "encoding": "inplace",
+        "label": "struct ICrowdfunding.Participation",
+        "members": [
+          {
+            "astId": 1546,
+            "contract": "contracts/crowdfunding/Crowdfunding.sol:Crowdfunding",
+            "label": "participant",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_address"
+          },
+          {
+            "astId": 1548,
+            "contract": "contracts/crowdfunding/Crowdfunding.sol:Crowdfunding",
+            "label": "amount",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 1550,
+            "contract": "contracts/crowdfunding/Crowdfunding.sol:Crowdfunding",
+            "label": "message",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_string_storage"
+          },
+          {
+            "astId": 1552,
+            "contract": "contracts/crowdfunding/Crowdfunding.sol:Crowdfunding",
+            "label": "timestamp",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256"
+          }
+        ],
+        "numberOfBytes": "128"
+      },
+      "t_struct(RoleData)22_storage": {
+        "encoding": "inplace",
+        "label": "struct AccessControl.RoleData",
+        "members": [
+          {
+            "astId": 19,
+            "contract": "contracts/crowdfunding/Crowdfunding.sol:Crowdfunding",
+            "label": "hasRole",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_mapping(t_address,t_bool)"
+          },
+          {
+            "astId": 21,
+            "contract": "contracts/crowdfunding/Crowdfunding.sol:Crowdfunding",
+            "label": "adminRole",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_bytes32"
+          }
+        ],
+        "numberOfBytes": "64"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}
