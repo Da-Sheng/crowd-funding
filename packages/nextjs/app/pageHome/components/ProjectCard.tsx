@@ -31,10 +31,8 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onSupportClic
 
   // 获取图片地址，确保有默认值
   const getImageSrc = (project: Project) => {
-    return (
-      project.image ||
-      "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80"
-    );
+    console.log(1111, project.image);
+    return "https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80";
   };
 
   return (
@@ -55,11 +53,11 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onSupportClic
             {project.category}
           </span>
         </div>
-        <div className="absolute top-3 right-3 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+        {/* <div className="absolute top-3 right-3 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
           <span className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-medium shadow-lg">
             {project.daysLeft}天
           </span>
-        </div>
+        </div> */}
         <div className="absolute bottom-3 right-3 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
           <button
             onClick={() => onViewDetails(project)}
@@ -96,7 +94,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onSupportClic
         <div className="flex justify-between items-center text-sm mb-4">
           <div className="transform hover:scale-105 transition-transform duration-200">
             <span className="text-gray-500">已筹</span>
-            <div className="font-bold text-green-600">{project.raised} ETH</div>
+            <div className="font-bold text-green-600">{project.raised} MON</div>
           </div>
           <div className="text-right transform hover:scale-105 transition-transform duration-200">
             <span className="text-gray-500">支持人数</span>

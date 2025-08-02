@@ -1,5 +1,5 @@
 import React from "react";
-import { MapPin, X } from "./Icons";
+import { X } from "./Icons";
 
 interface FormData {
   title: string;
@@ -79,7 +79,7 @@ export const CreateCrowdfundingModal: React.FC<CreateCrowdfundingModalProps> = (
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="transform animate-slide-in-left" style={{ animationDelay: "300ms" }}>
-                <label className="block text-sm font-medium text-gray-700 mb-2">筹款目标 (ETH) *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">筹款目标 (MON) *</label>
                 <input
                   type="number"
                   step="0.001"
@@ -138,7 +138,7 @@ export const CreateCrowdfundingModal: React.FC<CreateCrowdfundingModalProps> = (
                 />
               </div>
             </div>
-
+            {/* 
             <div className="transform animate-slide-in-left" style={{ animationDelay: "500ms" }}>
               <label className="block text-sm font-medium text-gray-700 mb-2">项目地址</label>
               <div className="relative">
@@ -152,9 +152,9 @@ export const CreateCrowdfundingModal: React.FC<CreateCrowdfundingModalProps> = (
                   placeholder="请输入项目所在地址"
                 />
               </div>
-            </div>
+            </div> */}
 
-            <div className="transform animate-slide-in-right" style={{ animationDelay: "600ms" }}>
+            {/* <div className="transform animate-slide-in-right" style={{ animationDelay: "600ms" }}>
               <label className="block text-sm font-medium text-gray-700 mb-2">项目图片URL</label>
               <input
                 type="url"
@@ -177,7 +177,7 @@ export const CreateCrowdfundingModal: React.FC<CreateCrowdfundingModalProps> = (
                   />
                 </div>
               )}
-            </div>
+            </div> */}
 
             <div className="transform animate-slide-in-left" style={{ animationDelay: "700ms" }}>
               <div className="flex items-center space-x-3">

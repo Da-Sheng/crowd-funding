@@ -50,7 +50,7 @@ export const LatestActivities: React.FC<LatestActivitiesProps> = ({
                     </div>
                     <p className="text-sm text-gray-600 mb-2">{event.args?.description || "无描述"}</p>
                     <div className="flex justify-between items-center text-xs text-gray-500">
-                      <span>目标: {event.args?.targetAmount ? formatEther(event.args.targetAmount) : "0"} ETH</span>
+                      <span>目标: {event.args?.targetAmount ? formatEther(event.args.targetAmount) : "0"} MON</span>
                       <span>ID: #{event.args?.crowdfundingId?.toString() || "未知"}</span>
                     </div>
                     <div className="mt-1">
@@ -76,7 +76,7 @@ export const LatestActivities: React.FC<LatestActivitiesProps> = ({
                     <div className="flex justify-between items-start mb-2">
                       <div className="flex items-center space-x-2">
                         <span className="font-medium text-green-600">
-                          {event.args?.amount ? formatEther(event.args.amount) : "0"} ETH
+                          {event.args?.amount ? formatEther(event.args.amount) : "0"} MON
                         </span>
                         <span className="text-sm text-gray-600">
                           支持了项目 #{event.args?.crowdfundingId?.toString() || "未知"}

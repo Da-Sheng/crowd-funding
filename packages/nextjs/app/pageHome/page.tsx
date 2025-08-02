@@ -113,9 +113,9 @@ const HomePage = () => {
           ).length || 0;
 
         // 获取图片URL，如果没有则使用默认图片
-        const imageUrl =
-          event.args?.imageUrl ||
-          `https://images.unsplash.com/photo-${1503676260728 + index}?w=800&h=400&fit=crop&crop=entropy&auto=format&q=80`;
+        const imageUrl = `https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80`;
+        // event.args?.imageUrl ||
+        // `https://images.unsplash.com/photo-${1503676260728 + index}?w=800&h=400&fit=crop&crop=entropy&auto=format&q=80`;
 
         return {
           id: Number(event.args?.crowdfundingId || index + 1),

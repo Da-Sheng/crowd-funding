@@ -58,7 +58,7 @@ export const ParticipateModal: React.FC<ParticipateModalProps> = ({
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">参与金额 (ETH)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">参与金额 (MON)</label>
               <EtherInput value={participateAmount} onChange={onAmountChange} placeholder="0.01" />
             </div>
 

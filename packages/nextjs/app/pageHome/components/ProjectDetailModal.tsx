@@ -153,7 +153,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
               <div className="flex items-center space-x-4 text-sm">
                 <div className="flex items-center space-x-1">
                   <Target size={16} />
-                  <span>{displayData.targetAmount} ETH 目标</span>
+                  <span>{displayData.targetAmount} MON 目标</span>
                 </div>
                 <div className="flex items-center space-x-1">
                   <Users size={16} />
@@ -288,7 +288,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
                             <div className="flex items-center space-x-2 mb-1">
                               <Address address={record.participant} />
                               <span className="text-sm font-medium text-green-600">
-                                {formatEther(record.amount)} ETH
+                                {formatEther(record.amount)} MON
                               </span>
                             </div>
                             {record.message && <p className="text-sm text-gray-600 italic">{record.message}</p>}
@@ -323,13 +323,13 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
                   {/* 金额信息 */}
                   <div className="space-y-4 mb-6">
                     <div className="text-center">
-                      <div className="text-3xl font-bold text-green-600">{displayData.currentAmount} ETH</div>
+                      <div className="text-3xl font-bold text-green-600">{displayData.currentAmount} MON</div>
                       <div className="text-sm text-gray-500">已筹集金额</div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4 text-center">
                       <div>
-                        <div className="text-lg font-semibold text-gray-900">{displayData.targetAmount} ETH</div>
+                        <div className="text-lg font-semibold text-gray-900">{displayData.targetAmount} MON</div>
                         <div className="text-xs text-gray-500">目标金额</div>
                       </div>
                       <div>
@@ -342,7 +342,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
 
                     {displayData.excessAmount > 0 && (
                       <div className="text-center p-3 bg-yellow-50 rounded-lg">
-                        <div className="text-sm text-yellow-800">超额筹集: {displayData.excessAmount} ETH</div>
+                        <div className="text-sm text-yellow-800">超额筹集: {displayData.excessAmount} MON</div>
                       </div>
                     )}
                   </div>

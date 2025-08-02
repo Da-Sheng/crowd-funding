@@ -106,8 +106,8 @@ export const Carousel: React.FC<CarouselProps> = ({
                         ></div>
                       </div>
                       <div className="flex justify-between text-sm mb-2">
-                        <span>已筹 {slide.raised} ETH</span>
-                        <span>目标 {slide.target} ETH</span>
+                        <span>已筹 {slide.raised} MON</span>
+                        <span>目标 {slide.target} MON</span>
                       </div>
                       {slide.creator && (
                         <div className="text-xs opacity-75">
