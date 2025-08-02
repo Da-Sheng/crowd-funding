@@ -24,18 +24,29 @@ interface ProjectCardProps {
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onSupportClick, onViewDetails }) => {
   const calculateProgress = (raised: number, target: number) => {
-    return target > 0 ? (raised / target) * 100 : 0;
+    const percent = target > 0 ? (raised / target) * 100 : 0;
+    if (percent >= 100) return 100;
+    return percent;
+  };
+
+  // 获取图片地址，确保有默认值
+  const getImageSrc = (project: Project) => {
+    return (
+      project.image ||
+      "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80"
+    );
   };
 
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 group">
       <div className="relative overflow-hidden">
         <img
-          src={project.image}
+          src={getImageSrc(project)}
           alt={project.title}
           className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
           onError={(e: any) => {
-            e.target.src = "https://via.placeholder.com/400x300/4F46E5/FFFFFF?text=众筹项目";
+            e.target.src =
+              "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80";
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>

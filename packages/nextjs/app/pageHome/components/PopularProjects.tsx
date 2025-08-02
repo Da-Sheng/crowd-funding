@@ -22,6 +22,14 @@ interface PopularProjectsProps {
 }
 
 export const PopularProjects: React.FC<PopularProjectsProps> = ({ projects, onSupportClick, onViewDetails }) => {
+  // 处理项目数据，确保图片有默认值
+  const processedProjects = projects.map(project => ({
+    ...project,
+    image:
+      project.image ||
+      "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
+  }));
+
   return (
     <section className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -35,7 +43,7 @@ export const PopularProjects: React.FC<PopularProjectsProps> = ({ projects, onSu
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {projects.map((project, index) => (
+          {processedProjects.map((project, index) => (
             <div
               key={project.id}
               style={{

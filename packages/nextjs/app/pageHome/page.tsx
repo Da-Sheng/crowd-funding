@@ -96,23 +96,40 @@ const HomePage = () => {
   // 轮播图数据处理
   const slides = React.useMemo(() => {
     if (crowdfundingCreatedEvents && crowdfundingCreatedEvents.length > 0) {
-      return crowdfundingCreatedEvents.slice(0, 3).map((event: any, index: number) => ({
-        id: Number(event.args?.crowdfundingId || index + 1),
-        title: event.args?.title || `众筹项目 #${event.args?.crowdfundingId}`,
-        description: event.args?.description || "正在筹集资金的项目",
-        image:
+      return crowdfundingCreatedEvents.slice(0, 3).map((event: any, index: number) => {
+        // 计算该项目的总筹款金额
+        const totalRaised =
+          crowdfundingParticipatedEvents
+            ?.filter((participateEvent: any) => participateEvent.args?.crowdfundingId === event.args?.crowdfundingId)
+            .reduce((sum: number, participateEvent: any) => {
+              const amount = participateEvent.args?.amount ? Number(formatEther(participateEvent.args.amount)) : 0;
+              return sum + amount;
+            }, 0) || 0;
+
+        // 计算支持人数
+        const supportersCount =
+          crowdfundingParticipatedEvents?.filter(
+            (participateEvent: any) => participateEvent.args?.crowdfundingId === event.args?.crowdfundingId,
+          ).length || 0;
+
+        // 获取图片URL，如果没有则使用默认图片
+        const imageUrl =
           event.args?.imageUrl ||
-          `https://images.unsplash.com/photo-${1503676260728 + index}?w=800&h=400&fit=crop&crop=entropy&auto=format&q=80`,
-        raised: 0,
-        target: event.args?.targetAmount ? Number(formatEther(event.args.targetAmount)) : 100,
-        supporters: 0,
-        creator: event.args?.creator,
-        beneficiary: event.args?.beneficiary,
-        timestamp: event.args?.timestamp,
-        category: "众筹",
-        daysLeft: Math.max(0, Math.floor((Number(event.args?.timestamp || 0) + 86400 - Date.now() / 1000) / 86400)),
-        location: "项目地址", // 可以从合约事件中获取或设置默认值
-      }));
+          `https://images.unsplash.com/photo-${1503676260728 + index}?w=800&h=400&fit=crop&crop=entropy&auto=format&q=80`;
+
+        return {
+          id: Number(event.args?.crowdfundingId || index + 1),
+          title: event.args?.title || `众筹项目 #${event.args?.crowdfundingId}`,
+          description: event.args?.description || "正在筹集资金的项目",
+          image: imageUrl,
+          raised: totalRaised, // 使用计算出的真实筹款金额
+          target: event.args?.targetAmount ? Number(formatEther(event.args.targetAmount)) : 100,
+          supporters: supportersCount, // 使用计算出的真实支持人数
+          creator: event.args?.creator,
+          beneficiary: event.args?.beneficiary,
+          timestamp: event.args?.timestamp,
+        };
+      });
     }
 
     return [
@@ -122,13 +139,10 @@ const HomePage = () => {
         description: "来自山区的优秀学生，因家庭困难面临辍学",
         image:
           "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&h=400&fit=crop&crop=entropy&auto=format&q=80",
-        raised: 45000,
+        raised: 45,
         creator: "",
-        target: 80000,
+        target: 80,
         supporters: 234,
-        category: "教育",
-        daysLeft: 15,
-        location: "云南省大理市",
       },
       {
         id: 2,
@@ -136,13 +150,10 @@ const HomePage = () => {
         description: "建设专业的流浪动物救助中心",
         image:
           "https://images.unsplash.com/photo-1425082661705-1834bfd09dca?w=800&h=400&fit=crop&crop=entropy&auto=format&q=80",
-        raised: 120000,
+        raised: 120,
         creator: "",
-        target: 200000,
+        target: 200,
         supporters: 456,
-        category: "公益",
-        daysLeft: 23,
-        location: "北京市朝阳区",
       },
       {
         id: 3,
@@ -150,38 +161,53 @@ const HomePage = () => {
         description: "改善偏远地区教学设施和条件",
         image:
           "https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=800&h=400&fit=crop&crop=entropy&auto=format&q=80",
-        raised: 78000,
+        raised: 78,
         creator: "",
-        target: 150000,
+        target: 150,
         supporters: 189,
-        category: "教育",
-        daysLeft: 30,
-        location: "四川省凉山州",
       },
     ];
-  }, [crowdfundingCreatedEvents]);
+  }, [crowdfundingCreatedEvents, crowdfundingParticipatedEvents]);
 
   // 热门项目数据处理
   const popularProjects = React.useMemo(() => {
     if (crowdfundingCreatedEvents && crowdfundingCreatedEvents.length > 0) {
       return crowdfundingCreatedEvents.slice(0, 4).map((event: any, index: number) => {
+        // 计算该项目的参与人数
         const participatedCount =
           crowdfundingParticipatedEvents?.filter(
             (participateEvent: any) => participateEvent.args?.crowdfundingId === event.args?.crowdfundingId,
           ).length || 0;
 
+        // 计算该项目的总筹款金额
+        const totalRaised =
+          crowdfundingParticipatedEvents
+            ?.filter((participateEvent: any) => participateEvent.args?.crowdfundingId === event.args?.crowdfundingId)
+            .reduce((sum: number, participateEvent: any) => {
+              const amount = participateEvent.args?.amount ? Number(formatEther(participateEvent.args.amount)) : 0;
+              return sum + amount;
+            }, 0) || 0;
+
+        // 获取图片URL，如果没有则使用默认图片
+        const imageUrl =
+          event.args?.imageUrl ||
+          `https://images.unsplash.com/photo-${1559757148 + index * 1000}?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80`;
+
         return {
           id: Number(event.args?.crowdfundingId || index + 1),
           title: event.args?.title || `项目 #${event.args?.crowdfundingId}`,
           description: event.args?.description || "众筹项目描述",
-          image:
-            event.args?.imageUrl ||
-            `https://images.unsplash.com/photo-${1559757148 + index * 1000}?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80`,
-          raised: 0,
+          image: imageUrl,
+          raised: totalRaised, // 使用计算出的真实筹款金额
           target: event.args?.targetAmount ? Number(formatEther(event.args.targetAmount)) : 100,
-          supporters: participatedCount,
+          supporters: participatedCount, // 使用计算出的真实参与人数
           category: event.args?.category || "众筹",
-          daysLeft: Math.max(0, Math.floor((Number(event.args?.timestamp || 0) + 86400 - Date.now() / 1000) / 86400)),
+          daysLeft: Math.max(
+            0,
+            Math.floor(
+              (Number(event.args?.timestamp || 0) + Number(event.args?.duration || 86400) - Date.now() / 1000) / 86400,
+            ),
+          ),
           creator: event.args?.creator,
           beneficiary: event.args?.beneficiary,
           timestamp: event.args?.timestamp,
@@ -197,8 +223,8 @@ const HomePage = () => {
         description: "帮助癌症患者获得及时治疗",
         image:
           "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
-        raised: 85000,
-        target: 120000,
+        raised: 85,
+        target: 120,
         supporters: 324,
         creator: "",
         category: "医疗",
@@ -211,8 +237,8 @@ const HomePage = () => {
         description: "帮助受灾家庭重建家园",
         image:
           "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
-        raised: 156000,
-        target: 200000,
+        raised: 156,
+        target: 200,
         creator: "",
         supporters: 567,
         category: "救灾",
@@ -225,8 +251,8 @@ const HomePage = () => {
         description: "在沙漠地区种植防风林",
         image:
           "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
-        raised: 42000,
-        target: 80000,
+        raised: 42,
+        target: 80,
         creator: "",
         supporters: 198,
         category: "环保",
@@ -239,8 +265,8 @@ const HomePage = () => {
         description: "支持青年创业者的科技项目",
         image:
           "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
-        raised: 98000,
-        target: 180000,
+        raised: 98,
+        target: 180,
         creator: "",
         supporters: 267,
         category: "创新",

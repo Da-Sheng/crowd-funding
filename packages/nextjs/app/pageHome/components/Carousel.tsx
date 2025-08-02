@@ -36,6 +36,14 @@ export const Carousel: React.FC<CarouselProps> = ({
     return target > 0 ? (raised / target) * 100 : 0;
   };
 
+  // 获取图片地址，如果没有图片则使用默认地址
+  const getImageSrc = (slide: Slide) => {
+    return (
+      slide.image ||
+      "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80"
+    );
+  };
+
   return (
     <section className="relative h-96 md:h-[500px] overflow-hidden">
       <div className="absolute inset-0">
@@ -52,11 +60,12 @@ export const Carousel: React.FC<CarouselProps> = ({
           >
             <div className="w-full h-full relative">
               <img
-                src={slide.image}
+                src={getImageSrc(slide)}
                 alt={slide.title}
                 className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
                 onError={(e: any) => {
-                  e.target.src = "https://via.placeholder.com/800x400/4F46E5/FFFFFF?text=众筹项目";
+                  e.target.src =
+                    "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80";
                 }}
               />
               <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent"></div>
@@ -116,18 +125,6 @@ export const Carousel: React.FC<CarouselProps> = ({
                         style={{ transitionDelay: "600ms" }}
                       >
                         立即支持
-                      </button>
-                      <button
-                        onClick={() => {
-                          // 这里可以添加查看详情的逻辑
-                          console.log("查看详情", slide.id);
-                        }}
-                        className={`bg-transparent border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-blue-600 transition-all duration-300 transform hover:scale-105 hover:shadow-lg ${
-                          index === currentSlide ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
-                        }`}
-                        style={{ transitionDelay: "700ms" }}
-                      >
-                        查看详情
                       </button>
                     </div>
                   </div>
