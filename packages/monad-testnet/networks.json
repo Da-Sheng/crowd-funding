@@ -1,0 +1,8 @@
+{
+  "monad-testnet": {
+    "Crowdfunding": {
+      "address": "0x767e5aCf95e71C55762145fF5B7Af22b882f667a",
+      "startBlock": 28930899
+    }
+  }
+}

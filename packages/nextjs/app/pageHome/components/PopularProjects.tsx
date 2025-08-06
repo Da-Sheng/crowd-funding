@@ -25,9 +25,7 @@ export const PopularProjects: React.FC<PopularProjectsProps> = ({ projects, onSu
   // 处理项目数据，确保图片有默认值
   const processedProjects = projects.map(project => ({
     ...project,
-    image:
-      project.image ||
-      "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    image: project.image || "",
   }));
 
   return (

@@ -138,21 +138,29 @@ export const useScaffoldEventHistory = <
 
   const isContractAddressAndClientReady = Boolean(deployedContractData?.address) && Boolean(publicClient);
 
-  // 计算fromBlock值，如果未指定则使用当前区块减去DEFAULT_BLOCK_RANGE
+  // 计算fromBlock值，如果未指定则优先使用合约部署区块
   const fromBlockValue = useMemo(() => {
     if (fromBlock !== undefined) {
+      // 处理负数fromBlock（表示从当前区块往前查询多少个区块）
+      if (typeof fromBlock === "bigint" && fromBlock < 0n && blockNumber) {
+        const negativeOffset = fromBlock * -1n;
+        return blockNumber > negativeOffset ? blockNumber - negativeOffset : 0n;
+      }
       return fromBlock;
     }
 
-    // 如果有当前区块号，则使用当前区块号减去DEFAULT_BLOCK_RANGE
-    if (blockNumber) {
-      return blockNumber > DEFAULT_BLOCK_RANGE ? BigInt(blockNumber) - DEFAULT_BLOCK_RANGE : 0n;
+    // 优先使用合约部署区块作为起始点，确保能查询到所有历史事件
+    if (deployedContractData && "deployedOnBlock" in deployedContractData && deployedContractData.deployedOnBlock) {
+      console.log(`使用合约部署区块 ${deployedContractData.deployedOnBlock} 作为查询起始点`);
+      return BigInt(deployedContractData.deployedOnBlock);
     }
 
-    // 否则使用部署区块或0
-    return BigInt(
-      deployedContractData && "deployedOnBlock" in deployedContractData ? deployedContractData.deployedOnBlock || 0 : 0,
-    );
+    // 如果没有部署区块信息，则使用当前区块减去DEFAULT_BLOCK_RANGE
+    if (blockNumber) {
+      console.log(`使用当前区块 ${blockNumber} 减去 ${DEFAULT_BLOCK_RANGE} 作为查询起始点`);
+      return blockNumber > DEFAULT_BLOCK_RANGE ? blockNumber - DEFAULT_BLOCK_RANGE : 0n;
+    }
+    return undefined;
   }, [fromBlock, blockNumber, deployedContractData]);
 
   const query = useInfiniteQuery({
@@ -169,7 +177,7 @@ export const useScaffoldEventHistory = <
         blocksBatchSize: blocksBatchSize.toString(),
       },
     ],
-    queryFn: async ({ pageParam }) => {
+    queryFn: async ({ pageParam = fromBlockValue || 0n }) => {
       if (!isContractAddressAndClientReady) return undefined;
 
       // 计算当前批次的toBlock
@@ -201,19 +209,14 @@ export const useScaffoldEventHistory = <
       }
     },
     enabled: enabled && isContractAddressAndClientReady && !isPollingActive, // Disable when polling starts
-    initialPageParam: fromBlockValue,
-    getNextPageParam: (lastPage, allPages, lastPageParam) => {
-      if (!blockNumber) return undefined;
-      if (lastPageParam >= BigInt(blockNumber)) return undefined;
+    initialPageParam: fromBlockValue || 0n,
+    getNextPageParam: (lastPage, _, lastPageParam = fromBlockValue || 0n) => {
+      if (!lastPage || lastPage.length === 0 || !blockNumber) return undefined;
 
-      const nextBlock = lastPageParam + BigInt(blocksBatchSize);
+      const nextPageParam = lastPageParam + BigInt(blocksBatchSize);
+      const maxBlock = toBlock || blockNumber;
 
-      // Don't go beyond the specified toBlock or current block
-      const maxBlock = toBlock && toBlock < blockNumber ? toBlock : blockNumber;
-
-      if (nextBlock > maxBlock) return undefined;
-
-      return nextBlock;
+      return nextPageParam <= maxBlock ? nextPageParam : undefined;
     },
     select: data => {
       const events = data.pages.flat() as unknown as UseScaffoldEventHistoryData<

@@ -38,10 +38,7 @@ export const Carousel: React.FC<CarouselProps> = ({
 
   // 获取图片地址，如果没有图片则使用默认地址
   const getImageSrc = (slide: Slide) => {
-    return (
-      slide.image ||
-      "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80"
-    );
+    return slide.image || "";
   };
 
   return (
@@ -64,8 +61,7 @@ export const Carousel: React.FC<CarouselProps> = ({
                 alt={slide.title}
                 className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
                 onError={(e: any) => {
-                  e.target.src =
-                    "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80";
+                  e.target.src = "";
                 }}
               />
               <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent"></div>

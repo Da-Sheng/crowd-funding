@@ -134,6 +134,7 @@ const config: HardhatUserConfig = {
   },
   // Configuration for harhdat-verify plugin
   etherscan: {
+    enabled: false,
     apiKey: etherscanApiKey,
   },
   // Configuration for etherscan-verify from hardhat-deploy plugin
@@ -143,7 +144,9 @@ const config: HardhatUserConfig = {
     },
   },
   sourcify: {
-    enabled: false,
+    enabled: true,
+    apiUrl: "https://sourcify-api-monad.blockvision.org",
+    browserUrl: "https://testnet.monadexplorer.com",
   },
 };
 

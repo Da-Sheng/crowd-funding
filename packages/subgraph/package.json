@@ -1,0 +1,16 @@
+{
+  "name": "crowdfunding-subgraph",
+  "version": "0.1.0",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ --ipfs https://api.studio.thegraph.com/ipfs/ crowdfunding-subgraph",
+    "create-local": "graph create --node http://localhost:8020/ crowdfunding-subgraph",
+    "remove-local": "graph remove --node http://localhost:8020/ crowdfunding-subgraph",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 crowdfunding-subgraph"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.51.0",
+    "@graphprotocol/graph-ts": "0.30.0"
+  }
+}

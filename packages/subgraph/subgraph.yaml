@@ -1,0 +1,36 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Crowdfunding
+    network: monad-testnet
+    source:
+      address: "0x767e5aCf95e71C55762145fF5B7Af22b882f667a"
+      abi: Crowdfunding
+      startBlock: 1
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Crowdfunding
+        - Participation
+        - CrowdfundingCounter
+      abis:
+        - name: Crowdfunding
+          file: ../hardhat/artifacts/contracts/crowdfunding/Crowdfunding.sol/Crowdfunding.json
+      eventHandlers:
+        - event: CrowdfundingCreated(indexed uint256,indexed address,indexed address,uint256,uint256,string,string,bytes,uint256)
+          handler: handleCrowdfundingCreated
+        - event: CrowdfundingParticipated(indexed uint256,indexed address,uint256,string,uint256)
+          handler: handleCrowdfundingParticipated
+        - event: CrowdfundingCompleted(indexed uint256,uint256,uint256,uint256)
+          handler: handleCrowdfundingCompleted
+        - event: CrowdfundingExpired(indexed uint256,uint256,uint256)
+          handler: handleCrowdfundingExpired
+        - event: FundsWithdrawn(indexed uint256,indexed address,uint256,uint256)
+          handler: handleFundsWithdrawn
+        - event: FundsReturned(indexed uint256,indexed address,uint256,uint256)
+          handler: handleFundsReturned
+      file: ./src/mapping.ts 

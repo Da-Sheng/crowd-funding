@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { X } from "./Icons";
+import { formatEther } from "viem";
 import { EtherInput } from "~~/components/scaffold-eth";
 
 interface ParticipateModalProps {
@@ -13,6 +14,8 @@ interface ParticipateModalProps {
   onMessageChange: (message: string) => void;
   onSubmit: () => void;
   isParticipating: boolean;
+  selectedProjectInfo: any;
+  isLoadingProjectInfo: boolean;
 }
 
 export const ParticipateModal: React.FC<ParticipateModalProps> = ({
@@ -26,7 +29,37 @@ export const ParticipateModal: React.FC<ParticipateModalProps> = ({
   onMessageChange,
   onSubmit,
   isParticipating,
+  selectedProjectInfo,
+  isLoadingProjectInfo,
 }) => {
+  // 检查项目是否已结束
+  const isProjectEnded = useMemo(() => {
+    if (!selectedProjectInfo) return false;
+
+    // 检查结束时间
+    const currentTime = Math.floor(Date.now() / 1000);
+    return currentTime > Number(selectedProjectInfo.endTime);
+  }, [selectedProjectInfo]);
+
+  // 检查项目是否已完成
+  const isProjectCompleted = useMemo(() => {
+    if (!selectedProjectInfo) return false;
+    return selectedProjectInfo.isCompleted;
+  }, [selectedProjectInfo]);
+
+  // 项目状态文本
+  const projectStatusText = useMemo(() => {
+    if (!selectedProjectInfo) return "";
+    if (isProjectCompleted) return "已完成";
+    if (isProjectEnded) return "已结束";
+    return "进行中";
+  }, [selectedProjectInfo, isProjectCompleted, isProjectEnded]);
+
+  // 格式化时间戳
+  const formatTimestamp = (timestamp: bigint) => {
+    return new Date(Number(timestamp) * 1000).toLocaleString();
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -57,6 +90,50 @@ export const ParticipateModal: React.FC<ParticipateModalProps> = ({
               />
             </div>
 
+            {isLoadingProjectInfo ? (
+              <div className="py-4 text-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                <p className="mt-2 text-sm text-gray-600">加载项目信息中...</p>
+              </div>
+            ) : selectedProjectInfo ? (
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h4 className="font-medium text-gray-900 mb-2">{selectedProjectInfo.title}</h4>
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div>
+                    <span className="text-gray-500">目标金额:</span>
+                    <div className="font-medium">{formatEther(selectedProjectInfo.targetAmount)} MON</div>
+                  </div>
+                  <div>
+                    <span className="text-gray-500">当前金额:</span>
+                    <div className="font-medium">{formatEther(selectedProjectInfo.currentAmount)} MON</div>
+                  </div>
+                  <div>
+                    <span className="text-gray-500">开始时间:</span>
+                    <div className="font-medium">{formatTimestamp(selectedProjectInfo.startTime)}</div>
+                  </div>
+                  <div>
+                    <span className="text-gray-500">结束时间:</span>
+                    <div className="font-medium">{formatTimestamp(selectedProjectInfo.endTime)}</div>
+                  </div>
+                  <div className="col-span-2">
+                    <span className="text-gray-500">状态:</span>
+                    <div
+                      className={`font-medium ${
+                        isProjectEnded || isProjectCompleted ? "text-red-500" : "text-green-500"
+                      }`}
+                    >
+                      {projectStatusText}
+                    </div>
+                  </div>
+                  {(isProjectEnded || isProjectCompleted) && (
+                    <div className="col-span-2 bg-red-50 p-2 rounded text-red-600 text-sm">
+                      此众筹项目已{isProjectCompleted ? "完成" : "结束"}，无法参与
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : null}
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">参与金额 (MON)</label>
               <EtherInput value={participateAmount} onChange={onAmountChange} placeholder="0.01" />
@@ -84,7 +161,7 @@ export const ParticipateModal: React.FC<ParticipateModalProps> = ({
               <button
                 type="button"
                 onClick={onSubmit}
-                disabled={isParticipating}
+                disabled={isParticipating || isProjectEnded || isProjectCompleted || !selectedProjectInfo}
                 className="flex-1 px-6 py-3 bg-gradient-to-r from-green-600 to-blue-600 text-white rounded-lg hover:from-green-700 hover:to-blue-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isParticipating ? "参与中..." : "立即支持"}

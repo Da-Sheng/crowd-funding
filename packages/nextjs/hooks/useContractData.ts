@@ -136,8 +136,7 @@ export const useContractData = () => {
         id: 4,
         title: "科技创新支持",
         description: "支持青年创业者的科技项目",
-        image:
-          "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
+        image: "",
         raised: 98000,
         target: 180000,
         supporters: 267,

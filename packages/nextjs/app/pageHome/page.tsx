@@ -13,6 +13,7 @@ import { PopularProjects } from "./components/PopularProjects";
 import { ProjectDetailModal } from "./components/ProjectDetailModal";
 import { formatEther, parseEther } from "viem";
 import { useScaffoldEventHistory, useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
+import { useAllCrowdfundings, useAllParticipations } from "~~/utils/graphql/hooks";
 
 // 类型定义
 interface FormData {
@@ -53,6 +54,9 @@ const HomePage = () => {
   const [selectedProjectId, setSelectedProjectId] = useState<string>("1");
   const [participateAmount, setParticipateAmount] = useState<string>("0.01");
   const [participateMessage, setParticipateMessage] = useState<string>("支持一下");
+  const [useSubgraph, setUseSubgraph] = useState<boolean>(true); // 是否使用子图查询
+  const [selectedProjectInfo, setSelectedProjectInfo] = useState<any>(null); // 选中项目的详细信息
+  const [isLoadingProjectInfo, setIsLoadingProjectInfo] = useState<boolean>(false); // 项目信息加载状态
 
   // 合约表单数据
   const [formData, setFormData] = useState<FormData>({
@@ -81,17 +85,85 @@ const HomePage = () => {
     contractName: "Crowdfunding",
   });
 
-  const { data: crowdfundingCreatedEvents } = useScaffoldEventHistory({
+  // 使用合约事件查询
+  const { data: contractCreatedEvents, isLoading: isLoadingContractEvents } = useScaffoldEventHistory({
     contractName: "Crowdfunding",
     eventName: "CrowdfundingCreated",
     watch: true,
+    enabled: !useSubgraph, // 只在不使用子图时启用
   });
 
-  const { data: crowdfundingParticipatedEvents } = useScaffoldEventHistory({
+  const { data: contractParticipatedEvents, isLoading: isLoadingParticipatedEvents } = useScaffoldEventHistory({
     contractName: "Crowdfunding",
     eventName: "CrowdfundingParticipated",
     watch: true,
+    enabled: !useSubgraph, // 只在不使用子图时启用
   });
+
+  // 使用子图查询
+  const {
+    data: subgraphData,
+    loading: isLoadingSubgraph,
+    error: subgraphError,
+  } = useAllCrowdfundings({
+    first: 100,
+    orderBy: "timestamp",
+    orderDirection: "desc",
+  });
+
+  const {
+    data: subgraphParticipations,
+    loading: isLoadingSubgraphParticipations,
+    error: subgraphParticipationError,
+  } = useAllParticipations({
+    first: 100,
+    orderBy: "timestamp",
+    orderDirection: "desc",
+  });
+
+  // 合并事件数据，优先使用子图数据
+  const crowdfundingCreatedEvents = React.useMemo(() => {
+    if (useSubgraph && subgraphData?.crowdfundingCreateds) {
+      // 将子图数据转换为与合约事件相似的格式
+      return subgraphData.crowdfundingCreateds.map((project: any) => ({
+        args: {
+          crowdfundingId: BigInt(project.crowdfundingId),
+          creator: project.creator,
+          beneficiary: project.beneficiary,
+          targetAmount: BigInt(project.targetAmount),
+          duration: BigInt(project.duration),
+          title: project.title,
+          description: project.description,
+          timestamp: BigInt(project.timestamp),
+          // 添加其他需要的字段
+        },
+      }));
+    }
+    return contractCreatedEvents;
+  }, [useSubgraph, subgraphData, contractCreatedEvents]);
+
+  // 处理参与事件数据
+  const crowdfundingParticipatedEvents = React.useMemo(() => {
+    if (useSubgraph && subgraphParticipations?.crowdfundingParticipateds) {
+      // 从子图数据中提取参与记录
+      return subgraphParticipations.crowdfundingParticipateds.map((participation: any) => ({
+        args: {
+          crowdfundingId: BigInt(participation.crowdfundingId),
+          participant: participation.participant,
+          amount: BigInt(participation.amount),
+          message: participation.message,
+          timestamp: BigInt(participation.timestamp),
+        },
+      }));
+    }
+    return contractParticipatedEvents;
+  }, [useSubgraph, subgraphParticipations, contractParticipatedEvents]);
+
+  // 切换数据源
+  const toggleDataSource = () => {
+    setUseSubgraph(!useSubgraph);
+  };
+
   // 轮播图数据处理
   const slides = React.useMemo(() => {
     if (crowdfundingCreatedEvents && crowdfundingCreatedEvents.length > 0) {
@@ -111,16 +183,14 @@ const HomePage = () => {
             (participateEvent: any) => participateEvent.args?.crowdfundingId === event.args?.crowdfundingId,
           ).length || 0;
 
-        // 获取图片URL，如果没有则使用默认图片
-        // const imageUrl = `https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80`;
-        // event.args?.imageUrl ||
-        // `https://images.unsplash.com/photo-${1503676260728 + index}?w=800&h=400&fit=crop&crop=entropy&auto=format&q=80`;
+        // 默认图片
+        const imageUrl = `https://images.unsplash.com/photo-${1503676260728 + index}?w=800&h=400&fit=crop&crop=entropy&auto=format&q=80`;
 
         return {
           id: Number(event.args?.crowdfundingId || index + 1),
           title: event.args?.title || `众筹项目 #${event.args?.crowdfundingId}`,
           description: event.args?.description || "正在筹集资金的项目",
-          // image: imageUrl,
+          image: imageUrl, // 添加默认图片
           raised: totalRaised, // 使用计算出的真实筹款金额
           target: event.args?.targetAmount ? Number(formatEther(event.args.targetAmount)) : 100,
           supporters: supportersCount, // 使用计算出的真实支持人数
@@ -131,41 +201,7 @@ const HomePage = () => {
       });
     }
 
-    return [
-      // {
-      //   id: 1,
-      //   title: "帮助小明完成学业梦想",
-      //   description: "来自山区的优秀学生，因家庭困难面临辍学",
-      //   image:
-      //     "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&h=400&fit=crop&crop=entropy&auto=format&q=80",
-      //   raised: 45,
-      //   creator: "",
-      //   target: 80,
-      //   supporters: 234,
-      // },
-      // {
-      //   id: 2,
-      //   title: "为流浪动物建设温暖家园",
-      //   description: "建设专业的流浪动物救助中心",
-      //   image:
-      //     "https://images.unsplash.com/photo-1425082661705-1834bfd09dca?w=800&h=400&fit=crop&crop=entropy&auto=format&q=80",
-      //   raised: 120,
-      //   creator: "",
-      //   target: 200,
-      //   supporters: 456,
-      // },
-      // {
-      //   id: 3,
-      //   title: "支持乡村教育发展计划",
-      //   description: "改善偏远地区教学设施和条件",
-      //   image:
-      //     "https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=800&h=400&fit=crop&crop=entropy&auto=format&q=80",
-      //   raised: 78,
-      //   creator: "",
-      //   target: 150,
-      //   supporters: 189,
-      // },
-    ];
+    return [];
   }, [crowdfundingCreatedEvents, crowdfundingParticipatedEvents]);
 
   // 热门项目数据处理
@@ -187,16 +223,14 @@ const HomePage = () => {
               return sum + amount;
             }, 0) || 0;
 
-        // 获取图片URL，如果没有则使用默认图片
-        // const imageUrl =
-        //   event.args?.imageUrl ||
-        //   `https://images.unsplash.com/photo-${1559757148 + index * 1000}?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80`;
+        // 默认图片
+        const imageUrl = `https://images.unsplash.com/photo-${1559757148 + index * 1000}?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80`;
 
         return {
           id: Number(event.args?.crowdfundingId || index + 1),
           title: event.args?.title || `项目 #${event.args?.crowdfundingId}`,
           description: event.args?.description || "众筹项目描述",
-          // image: imageUrl,
+          image: imageUrl, // 添加默认图片
           raised: totalRaised, // 使用计算出的真实筹款金额
           target: event.args?.targetAmount ? Number(formatEther(event.args.targetAmount)) : 100,
           supporters: participatedCount, // 使用计算出的真实参与人数
@@ -215,65 +249,13 @@ const HomePage = () => {
       });
     }
 
-    return [
-      // {
-      //   id: 1,
-      //   title: "紧急医疗救助",
-      //   description: "帮助癌症患者获得及时治疗",
-      //   image:
-      //     "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
-      //   raised: 85,
-      //   target: 120,
-      //   supporters: 324,
-      //   creator: "",
-      //   category: "医疗",
-      //   daysLeft: 15,
-      //   location: "上海市浦东新区",
-      // },
-      // {
-      //   id: 2,
-      //   title: "灾区重建援助",
-      //   description: "帮助受灾家庭重建家园",
-      //   image:
-      //     "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
-      //   raised: 156,
-      //   target: 200,
-      //   creator: "",
-      //   supporters: 567,
-      //   category: "救灾",
-      //   daysLeft: 8,
-      //   location: "河南省郑州市",
-      // },
-      // {
-      //   id: 3,
-      //   title: "环保植树计划",
-      //   description: "在沙漠地区种植防风林",
-      //   image:
-      //     "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
-      //   raised: 42,
-      //   target: 80,
-      //   creator: "",
-      //   supporters: 198,
-      //   category: "环保",
-      //   daysLeft: 22,
-      //   location: "内蒙古阿拉善盟",
-      // },
-      // {
-      //   id: 4,
-      //   title: "科技创新支持",
-      //   description: "支持青年创业者的科技项目",
-      //   image:
-      //     "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
-      //   raised: 98,
-      //   target: 180,
-      //   creator: "",
-      //   supporters: 267,
-      //   category: "创新",
-      //   daysLeft: 30,
-      //   location: "深圳市南山区",
-      // },
-    ];
+    return [];
   }, [crowdfundingCreatedEvents, crowdfundingParticipatedEvents]);
+
+  // 判断是否正在加载数据
+  const isLoading = useSubgraph
+    ? isLoadingSubgraph || isLoadingSubgraphParticipations
+    : isLoadingContractEvents || isLoadingParticipatedEvents;
 
   // 设置当前用户地址为受益人
   useEffect(() => {
@@ -389,8 +371,48 @@ const HomePage = () => {
   // 处理支持项目
   const handleSupportClick = (projectId: string) => {
     setSelectedProjectId(projectId);
+    fetchProjectInfo(projectId);
     setShowParticipateModal(true);
   };
+
+  // 获取项目信息的合约读取
+  const { data: projectInfo, refetch: refetchProjectInfo } = useScaffoldReadContract({
+    contractName: "Crowdfunding",
+    functionName: "getCrowdfundingInfo",
+    args: [selectedProjectId ? BigInt(selectedProjectId) : BigInt(0)],
+  });
+
+  // 获取项目信息
+  const fetchProjectInfo = async (projectId: string) => {
+    if (!projectId) return;
+
+    try {
+      setIsLoadingProjectInfo(true);
+      setSelectedProjectId(projectId);
+      await refetchProjectInfo();
+      setSelectedProjectInfo(projectInfo);
+    } catch (error) {
+      console.error("获取项目信息失败:", error);
+      setSelectedProjectInfo(null);
+    } finally {
+      setIsLoadingProjectInfo(false);
+    }
+  };
+
+  // 当项目信息更新时设置到状态
+  useEffect(() => {
+    if (projectInfo) {
+      setSelectedProjectInfo(projectInfo);
+      setIsLoadingProjectInfo(false);
+    }
+  }, [projectInfo]);
+
+  // 项目ID变更时获取信息
+  useEffect(() => {
+    if (showParticipateModal) {
+      fetchProjectInfo(selectedProjectId);
+    }
+  }, [selectedProjectId, showParticipateModal]);
 
   // 处理查看详情
   const handleViewDetails = (project: Project) => {
@@ -403,30 +425,52 @@ const HomePage = () => {
       {/* 导航栏 */}
       <Navbar charityAddress={charityAddress} isCreating={isCreating} onCreateClick={() => setShowModal(true)} />
 
-      {/* 轮播图区域 */}
-      <Carousel
-        // @ts-ignore
-        slides={slides}
-        currentSlide={currentSlide}
-        onNext={nextSlide}
-        onPrev={prevSlide}
-        onSlideChange={setCurrentSlide}
-        onSupportClick={handleSupportClick}
-      />
+      {/* 数据源切换按钮 */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-end">
+        <button
+          onClick={toggleDataSource}
+          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >
+          {useSubgraph ? "使用合约直接查询" : "使用子图查询"}
+        </button>
+        {(subgraphError || subgraphParticipationError) && useSubgraph && (
+          <div className="ml-2 text-red-500 text-sm">
+            子图查询错误: {subgraphError?.message || subgraphParticipationError?.message}
+          </div>
+        )}
+      </div>
 
-      {/* 热门项目区域 */}
-      <PopularProjects
-        // @ts-ignore
-        projects={popularProjects}
-        onSupportClick={handleSupportClick}
-        onViewDetails={handleViewDetails}
-      />
+      {isLoading ? (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+          <p className="mt-4 text-lg text-gray-600">加载数据中...</p>
+        </div>
+      ) : (
+        <>
+          {/* 轮播图区域 */}
+          <Carousel
+            slides={slides}
+            currentSlide={currentSlide}
+            onNext={nextSlide}
+            onPrev={prevSlide}
+            onSlideChange={setCurrentSlide}
+            onSupportClick={handleSupportClick}
+          />
 
-      {/* 最新事件展示区域 */}
-      <LatestActivities
-        crowdfundingCreatedEvents={crowdfundingCreatedEvents || []}
-        crowdfundingParticipatedEvents={crowdfundingParticipatedEvents || []}
-      />
+          {/* 热门项目区域 */}
+          <PopularProjects
+            projects={popularProjects}
+            onSupportClick={handleSupportClick}
+            onViewDetails={handleViewDetails}
+          />
+
+          {/* 最新事件展示区域 */}
+          <LatestActivities
+            crowdfundingCreatedEvents={crowdfundingCreatedEvents || []}
+            crowdfundingParticipatedEvents={crowdfundingParticipatedEvents || []}
+          />
+        </>
+      )}
 
       {/* 新增筹款弹窗 */}
       <CreateCrowdfundingModal
@@ -451,6 +495,8 @@ const HomePage = () => {
         onMessageChange={setParticipateMessage}
         onSubmit={handleParticipateInCrowdfunding}
         isParticipating={isParticipating}
+        selectedProjectInfo={selectedProjectInfo}
+        isLoadingProjectInfo={isLoadingProjectInfo}
       />
 
       {/* 项目详情弹窗 */}

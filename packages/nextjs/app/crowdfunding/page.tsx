@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { formatEther, parseEther } from "viem";
 import { Address, EtherInput } from "~~/components/scaffold-eth";
 import {
@@ -9,6 +9,25 @@ import {
   useScaffoldReadContract,
   useScaffoldWriteContract,
 } from "~~/hooks/scaffold-eth";
+
+// 定义众筹项目类型
+interface CrowdfundingProject {
+  id: bigint;
+  creator: string;
+  beneficiary: string;
+  targetAmount: bigint;
+  currentAmount: bigint;
+  startTime: bigint;
+  endTime: bigint;
+  duration: bigint;
+  title: string;
+  description: string;
+  status: number;
+  excessAmount: bigint;
+  isCompleted: boolean;
+  isStaking: boolean;
+  returnOnExpire: boolean;
+}
 
 const CrowdfundingPage = () => {
   // 状态变量
@@ -21,6 +40,13 @@ const CrowdfundingPage = () => {
   const [returnOnExpire, setReturnOnExpire] = useState<boolean>(true);
   const [participateAmount, setParticipateAmount] = useState<string>("0.01");
   const [participateMessage, setParticipateMessage] = useState<string>("支持一下");
+
+  // 直接查询相关状态
+  const [directQueryProjects, setDirectQueryProjects] = useState<CrowdfundingProject[]>([]);
+  const [isLoadingDirectQuery, setIsLoadingDirectQuery] = useState<boolean>(false);
+  const [directQueryError, setDirectQueryError] = useState<Error | null>(null);
+  const [lastQueryTime, setLastQueryTime] = useState<number>(0);
+  const CACHE_DURATION = 5 * 60 * 1000; // 5分钟缓存
 
   // 获取合约实例
   const { data: crowdfundingContract } = useScaffoldContract({
@@ -82,6 +108,120 @@ const CrowdfundingPage = () => {
     fromBlock: -1000n, // 只查询最近1000个区块
     blocksBatchSize: 100, // 减小批次大小
   });
+
+  // 直接查询所有众筹项目
+  const fetchAllCrowdfundingProjects = async () => {
+    if (!crowdfundingContract) return;
+
+    // 检查缓存
+    const now = Date.now();
+    if (now - lastQueryTime < CACHE_DURATION && directQueryProjects.length > 0) {
+      console.log("使用缓存的众筹项目数据");
+      return;
+    }
+
+    try {
+      setIsLoadingDirectQuery(true);
+      setDirectQueryError(null);
+
+      // 尝试从localStorage获取缓存
+      const cachedData = localStorage.getItem("crowdfunding_projects");
+      const cachedTime = localStorage.getItem("crowdfunding_projects_time");
+
+      if (cachedData && cachedTime && now - parseInt(cachedTime) < CACHE_DURATION) {
+        console.log("使用localStorage缓存的众筹项目数据");
+        const projects = JSON.parse(cachedData);
+        setDirectQueryProjects(projects);
+        setLastQueryTime(parseInt(cachedTime));
+        setIsLoadingDirectQuery(false);
+        return;
+      }
+
+      const projects: CrowdfundingProject[] = [];
+      const MAX_ID = 100; // 最大尝试ID
+      const BATCH_SIZE = 10; // 批量查询大小
+
+      // 批量查询，减少网络请求
+      for (let startId = 1; startId <= MAX_ID; startId += BATCH_SIZE) {
+        const batchPromises = [];
+
+        for (let i = 0; i < BATCH_SIZE && startId + i <= MAX_ID; i++) {
+          const currentId = startId + i;
+          batchPromises.push(
+            crowdfundingContract.read
+              .getCrowdfundingInfo([BigInt(currentId)])
+              .then(info => ({ info }))
+              .catch(() => ({ info: null })),
+          );
+        }
+
+        const results = await Promise.all(batchPromises);
+
+        // 处理批量结果
+        let emptyCount = 0;
+        for (let j = 0; j < results.length; j++) {
+          const { info } = results[j];
+          if (info && info.id > 0n) {
+            projects.push(info);
+          } else {
+            emptyCount++;
+          }
+        }
+
+        // 如果整个批次都是空的，可能已经到达了最大ID
+        if (emptyCount === BATCH_SIZE) {
+          console.log(`ID ${startId} 到 ${startId + BATCH_SIZE - 1} 都不存在，停止查询`);
+          break;
+        }
+      }
+
+      console.log(`直接查询到 ${projects.length} 个众筹项目`);
+
+      // 按ID降序排序（最新的在前面）
+      projects.sort((a, b) => (b.id > a.id ? 1 : -1));
+
+      // 保存到localStorage
+      try {
+        localStorage.setItem("crowdfunding_projects", JSON.stringify(projects));
+        localStorage.setItem("crowdfunding_projects_time", now.toString());
+      } catch (error) {
+        console.error("保存到localStorage失败:", error);
+      }
+
+      setDirectQueryProjects(projects);
+      setLastQueryTime(now);
+    } catch (error) {
+      console.error("直接查询众筹项目失败:", error);
+      setDirectQueryError(error as Error);
+    } finally {
+      setIsLoadingDirectQuery(false);
+    }
+  };
+
+  // 页面加载时查询所有众筹项目
+  useEffect(() => {
+    fetchAllCrowdfundingProjects();
+  }, [crowdfundingContract]);
+
+  // 当事件查询失败时，使用直接查询结果
+  const displayProjects = useMemo(() => {
+    if (crowdfundingCreatedEvents && crowdfundingCreatedEvents.length > 0) {
+      return crowdfundingCreatedEvents;
+    }
+
+    // 将直接查询结果转换为类似事件的格式
+    return directQueryProjects.map(project => ({
+      args: {
+        crowdfundingId: project.id,
+        creator: project.creator,
+        beneficiary: project.beneficiary,
+        targetAmount: project.targetAmount,
+        title: project.title,
+        description: project.description,
+        timestamp: project.startTime,
+      },
+    }));
+  }, [crowdfundingCreatedEvents, directQueryProjects]);
 
   // 设置当前用户地址为受益人
   useEffect(() => {
@@ -145,6 +285,67 @@ const CrowdfundingPage = () => {
   // 格式化时间戳
   const formatTimestamp = (timestamp: bigint) => {
     return new Date(Number(timestamp) * 1000).toLocaleString();
+  };
+
+  // 事件日志
+  const renderCrowdfundingCreatedEvents = () => {
+    if (isLoadingCreatedEvents || isLoadingDirectQuery) {
+      return <p className="text-center py-4">加载众筹创建事件中...</p>;
+    }
+
+    if (createdEventsError && directQueryError) {
+      return (
+        <div className="text-center py-4">
+          <p className="text-red-500">加载众筹创建事件失败: {createdEventsError.message}</p>
+          <p className="text-red-500">直接查询失败: {directQueryError.message}</p>
+          <button className="btn btn-sm btn-outline mt-2" onClick={fetchAllCrowdfundingProjects}>
+            重试直接查询
+          </button>
+        </div>
+      );
+    }
+
+    if (displayProjects && displayProjects.length > 0) {
+      return (
+        <table className="table w-full">
+          <thead>
+            <tr>
+              <th>众筹ID</th>
+              <th>创建者</th>
+              <th>受益人</th>
+              <th>目标金额</th>
+              <th>时间</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            {displayProjects.map((event, index) => (
+              <tr key={index}>
+                <td>{event.args?.crowdfundingId?.toString() || "N/A"}</td>
+                <td>
+                  <Address address={event.args?.creator || ""} />
+                </td>
+                <td>
+                  <Address address={event.args?.beneficiary || ""} />
+                </td>
+                <td>{event.args?.targetAmount ? formatEther(event.args.targetAmount) : "0"} ETH</td>
+                <td>{event.args?.timestamp ? formatTimestamp(event.args.timestamp) : "N/A"}</td>
+                <td>
+                  <button
+                    className="btn btn-sm btn-outline"
+                    onClick={() => setCrowdfundingId(event.args?.crowdfundingId?.toString() || "1")}
+                  >
+                    查看
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      );
+    }
+
+    return <p className="text-center py-4">暂无众筹创建事件</p>;
   };
 
   return (
@@ -381,41 +582,19 @@ const CrowdfundingPage = () => {
         <h2 className="text-xl font-semibold mb-4">事件日志</h2>
 
         <div className="mb-6">
-          <h3 className="text-lg font-medium mb-2">众筹创建事件</h3>
-          {isLoadingCreatedEvents ? (
-            <p className="text-center py-4">加载众筹创建事件中...</p>
-          ) : createdEventsError ? (
-            <p className="text-center py-4 text-red-500">加载众筹创建事件失败: {createdEventsError.message}</p>
-          ) : crowdfundingCreatedEvents && crowdfundingCreatedEvents.length > 0 ? (
-            <table className="table w-full">
-              <thead>
-                <tr>
-                  <th>众筹ID</th>
-                  <th>创建者</th>
-                  <th>受益人</th>
-                  <th>目标金额</th>
-                  <th>时间</th>
-                </tr>
-              </thead>
-              <tbody>
-                {crowdfundingCreatedEvents.map((event, index) => (
-                  <tr key={index}>
-                    <td>{event.args?.crowdfundingId?.toString() || "N/A"}</td>
-                    <td>
-                      <Address address={event.args?.creator || ""} />
-                    </td>
-                    <td>
-                      <Address address={event.args?.beneficiary || ""} />
-                    </td>
-                    <td>{event.args?.targetAmount ? formatEther(event.args.targetAmount) : "0"} ETH</td>
-                    <td>{event.args?.timestamp ? formatTimestamp(event.args.timestamp) : "N/A"}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <p className="text-center py-4">暂无众筹创建事件</p>
-          )}
+          <div className="flex justify-between items-center mb-2">
+            <h3 className="text-lg font-medium">众筹创建事件</h3>
+            <div className="flex gap-2">
+              <button
+                className="btn btn-sm btn-outline"
+                onClick={fetchAllCrowdfundingProjects}
+                disabled={isLoadingDirectQuery}
+              >
+                {isLoadingDirectQuery ? "加载中..." : "直接查询所有项目"}
+              </button>
+            </div>
+          </div>
+          {renderCrowdfundingCreatedEvents()}
         </div>
 
         <div>

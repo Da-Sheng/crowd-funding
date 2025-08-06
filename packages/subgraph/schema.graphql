@@ -1,0 +1,40 @@
+enum CrowdfundingStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+  EXPIRED
+}
+
+type Crowdfunding @entity {
+  id: ID!
+  creator: Bytes!
+  beneficiary: Bytes!
+  targetAmount: BigInt!
+  currentAmount: BigInt!
+  startTime: BigInt!
+  endTime: BigInt!
+  duration: BigInt!
+  title: String!
+  description: String!
+  status: CrowdfundingStatus!
+  excessAmount: BigInt!
+  isCompleted: Boolean!
+  isStaking: Boolean!
+  returnOnExpire: Boolean!
+  createdAt: BigInt!
+  participations: [Participation!]! @derivedFrom(field: "crowdfunding")
+}
+
+type Participation @entity {
+  id: ID!
+  crowdfunding: Crowdfunding!
+  participant: Bytes!
+  amount: BigInt!
+  message: String!
+  timestamp: BigInt!
+}
+
+type CrowdfundingCounter @entity {
+  id: ID!
+  count: BigInt!
+} 
