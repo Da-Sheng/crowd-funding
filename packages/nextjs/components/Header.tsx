@@ -5,10 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { hardhat } from "viem/chains";
+import { useAccount } from "wagmi";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 // import { BugAntIcon } from "@heroicons/react/24/outline"; // 不再需要，因为移除了Debug页面
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
-import { useOutsideClick, useTargetNetwork } from "~~/hooks/scaffold-eth";
+import { useOutsideClick, useScaffoldReadContract, useTargetNetwork } from "~~/hooks/scaffold-eth";
 
 type HeaderMenuLink = {
   label: string;
@@ -79,6 +80,13 @@ export const HeaderMenuLinks = () => {
 export const Header = () => {
   const { targetNetwork } = useTargetNetwork();
   const isLocalNetwork = targetNetwork.id === hardhat.id;
+  const { isConnected } = useAccount();
+
+  // 获取慈善地址
+  const { data: charityAddress } = useScaffoldReadContract({
+    contractName: "Crowdfunding",
+    functionName: "charityAddress",
+  });
 
   const burgerMenuRef = useRef<HTMLDetailsElement>(null);
   useOutsideClick(burgerMenuRef, () => {
@@ -136,8 +144,16 @@ export const Header = () => {
               </nav>
             </div>
 
-            {/* Right side - Connect button and Faucet */}
-            <div className="flex items-center space-x-3">
+            {/* Right side - Charity Address, Connect button and Faucet */}
+            <div className="flex items-center space-x-4">
+              {isConnected && charityAddress && (
+                <div className="hidden md:flex items-center bg-green-50/80 backdrop-blur-md px-4 py-2.5 rounded-full border border-green-200/50 shadow-sm">
+                  <span className="text-xs font-medium text-green-700 mr-2">慈善地址:</span>
+                  <code className="text-xs text-green-800 font-mono bg-green-100/60 px-2 py-1 rounded border border-green-300/40">
+                    {`${charityAddress.slice(0, 6)}...${charityAddress.slice(-4)}`}
+                  </code>
+                </div>
+              )}
               <div className="transform transition-all duration-300 hover:scale-105">
                 <RainbowKitCustomConnectButton />
               </div>

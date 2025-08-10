@@ -6,8 +6,6 @@ import { CreateCrowdfundingModal } from "./components/CreateCrowdfundingModal";
 import { GlobalStyles } from "./components/GlobalStyles";
 // 启用详情弹窗
 import { LatestActivities } from "./components/LatestActivities";
-// 导入组件
-import { Navbar } from "./components/Navbar";
 import { ParticipateModal } from "./components/ParticipateModal";
 import { PopularProjects } from "./components/PopularProjects";
 import { ProjectDetailModal } from "./components/ProjectDetailModal";
@@ -84,10 +82,6 @@ const HomePage = () => {
   });
 
   // 合约hooks
-  const { data: charityAddress } = useScaffoldReadContract({
-    contractName: "Crowdfunding",
-    functionName: "charityAddress",
-  });
 
   const { writeContractAsync: createCrowdfunding, isMining: isCreating } = useScaffoldWriteContract({
     contractName: "Crowdfunding",
@@ -214,7 +208,7 @@ const HomePage = () => {
     }
 
     return [];
-  }, [crowdfundingCreatedEvents, crowdfundingParticipatedEvents]);
+  }, [crowdfundingCreatedEvents, crowdfundingParticipatedEvents, defaultImages]);
 
   // 热门项目数据处理
   const popularProjects = React.useMemo(() => {
@@ -262,7 +256,7 @@ const HomePage = () => {
     }
 
     return [];
-  }, [crowdfundingCreatedEvents, crowdfundingParticipatedEvents]);
+  }, [crowdfundingCreatedEvents, crowdfundingParticipatedEvents, defaultImages]);
 
   // 判断是否正在加载数据
   const isLoading = useSubgraph
@@ -424,7 +418,7 @@ const HomePage = () => {
     if (showParticipateModal) {
       fetchProjectInfo(selectedProjectId);
     }
-  }, [selectedProjectId, showParticipateModal]);
+  }, [selectedProjectId, showParticipateModal, fetchProjectInfo]);
 
   // 处理查看详情
   const handleViewDetails = (project: Project) => {
@@ -434,22 +428,32 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* 导航栏 */}
-      <Navbar charityAddress={charityAddress} isCreating={isCreating} onCreateClick={() => setShowModal(true)} />
+      {/* 操作按钮区域 */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+        <div className="flex items-center space-x-4">
+          <button
+            onClick={toggleDataSource}
+            className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-md hover:from-blue-700 hover:to-purple-700 transition-all duration-300 flex items-center space-x-2 shadow-sm hover:shadow-md transform hover:scale-105 text-sm font-medium"
+          >
+            {useSubgraph ? "使用合约直接查询" : "使用子图查询"}
+          </button>
+          {(subgraphError || subgraphParticipationError) && useSubgraph && (
+            <div className="ml-2 text-red-500 text-sm">
+              子图查询错误: {subgraphError?.message || subgraphParticipationError?.message}
+            </div>
+          )}
+        </div>
 
-      {/* 数据源切换按钮 */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-end">
         <button
-          onClick={toggleDataSource}
-          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          onClick={() => setShowModal(true)}
+          disabled={isCreating}
+          className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300 flex items-center space-x-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {useSubgraph ? "使用合约直接查询" : "使用子图查询"}
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          </svg>
+          <span>{isCreating ? "创建中..." : "发起众筹"}</span>
         </button>
-        {(subgraphError || subgraphParticipationError) && useSubgraph && (
-          <div className="ml-2 text-red-500 text-sm">
-            子图查询错误: {subgraphError?.message || subgraphParticipationError?.message}
-          </div>
-        )}
       </div>
 
       {isLoading ? (
