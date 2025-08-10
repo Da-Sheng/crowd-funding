@@ -95,9 +95,9 @@ export const Header = () => {
 
   return (
     <>
-      <div className="sticky lg:static top-0 bg-white/90 backdrop-blur-sm shadow-lg border-b border-gray-100 min-h-0 shrink-0 z-20 px-4 sm:px-6 lg:px-8 transition-all duration-300">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex justify-between items-center h-24">
+      <div className="sticky lg:static top-0 bg-white/90 backdrop-blur-sm shadow-lg border-b border-gray-100 min-h-0 shrink-0 z-20 px-4 sm:px-6 lg:px-8 transition-all duration-300 header-animated-bg overflow-hidden">
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="flex justify-between items-center h-24 relative z-10">
             {/* Left side - Logo and Navigation */}
             <div className="flex items-center space-x-8">
               {/* Mobile menu button */}
