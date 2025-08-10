@@ -31,7 +31,7 @@ export const menuLinks: HeaderMenuLink[] = [
   // 主要使用的页面
   {
     label: "Home",
-    href: "/pageHome",
+    href: "/",
   },
   {
     label: "crowdfunding",
@@ -113,10 +113,10 @@ export const Header = () => {
                 passHref
                 className="hidden lg:flex items-center gap-3 group transition-all duration-300 transform hover:scale-105"
               >
-                <div className="relative w-10 h-10 overflow-hidden rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 p-2 shadow-lg group-hover:shadow-xl transition-all duration-300">
+                <div className="relative w-10 h-10 overflow-hidden rounded-xl shadow-lg group-hover:shadow-xl transition-all duration-300">
                   <Image
-                    alt="SE2 logo"
-                    className="cursor-pointer filter brightness-0 invert transition-transform duration-300 group-hover:scale-110"
+                    alt="Crowdfunding logo"
+                    className="cursor-pointer transition-transform duration-300 group-hover:scale-110"
                     fill
                     src="/logo.svg"
                   />
