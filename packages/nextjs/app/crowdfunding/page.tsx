@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { formatEther, parseEther } from "viem";
 import { Address, EtherInput } from "~~/components/scaffold-eth";
 import {
@@ -110,7 +110,7 @@ const CrowdfundingPage = () => {
   });
 
   // 直接查询所有众筹项目
-  const fetchAllCrowdfundingProjects = async () => {
+  const fetchAllCrowdfundingProjects = useCallback(async () => {
     if (!crowdfundingContract) return;
 
     // 检查缓存
@@ -196,12 +196,12 @@ const CrowdfundingPage = () => {
     } finally {
       setIsLoadingDirectQuery(false);
     }
-  };
+  }, [crowdfundingContract, directQueryProjects.length, lastQueryTime]);
 
   // 页面加载时查询所有众筹项目
   useEffect(() => {
     fetchAllCrowdfundingProjects();
-  }, [crowdfundingContract]);
+  }, [fetchAllCrowdfundingProjects]);
 
   // 当事件查询失败时，使用直接查询结果
   const displayProjects = useMemo(() => {
