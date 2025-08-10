@@ -45,6 +45,18 @@ interface Project {
 }
 
 const HomePage = () => {
+  // 默认图片数组
+  const defaultImages = [
+    "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&h=400&fit=crop&crop=entropy&auto=format&q=80", // 科技/创新
+    "https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=800&h=400&fit=crop&crop=entropy&auto=format&q=80", // 教育
+    "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=400&fit=crop&crop=entropy&auto=format&q=80", // 自然/环保
+    "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800&h=400&fit=crop&crop=entropy&auto=format&q=80", // 社区/建筑
+    "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=800&h=400&fit=crop&crop=entropy&auto=format&q=80", // 医疗健康
+    "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&h=400&fit=crop&crop=entropy&auto=format&q=80", // 商业/创业
+    "https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=800&h=400&fit=crop&crop=entropy&auto=format&q=80", // 艺术/文化
+    "https://images.unsplash.com/photo-1573164713712-03790a178651?w=800&h=400&fit=crop&crop=entropy&auto=format&q=80", // 体育/运动
+  ];
+
   // 状态管理
   const [currentSlide, setCurrentSlide] = useState(0);
   const [showModal, setShowModal] = useState(false);
@@ -183,8 +195,8 @@ const HomePage = () => {
             (participateEvent: any) => participateEvent.args?.crowdfundingId === event.args?.crowdfundingId,
           ).length || 0;
 
-        // 默认图片
-        const imageUrl = `https://images.unsplash.com/photo-${1503676260728 + index}?w=800&h=400&fit=crop&crop=entropy&auto=format&q=80`;
+        // 使用默认图片数组，循环使用
+        const imageUrl = defaultImages[index % defaultImages.length];
 
         return {
           id: Number(event.args?.crowdfundingId || index + 1),
@@ -223,8 +235,8 @@ const HomePage = () => {
               return sum + amount;
             }, 0) || 0;
 
-        // 默认图片
-        const imageUrl = `https://images.unsplash.com/photo-${1559757148 + index * 1000}?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80`;
+        // 使用默认图片数组，循环使用，调整为400x300尺寸
+        const imageUrl = defaultImages[index % defaultImages.length].replace("w=800&h=400", "w=400&h=300");
 
         return {
           id: Number(event.args?.crowdfundingId || index + 1),
