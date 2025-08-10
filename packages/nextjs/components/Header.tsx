@@ -5,7 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { hardhat } from "viem/chains";
-import { Bars3Icon, BugAntIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon } from "@heroicons/react/24/outline";
+// import { BugAntIcon } from "@heroicons/react/24/outline"; // 不再需要，因为移除了Debug页面
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick, useTargetNetwork } from "~~/hooks/scaffold-eth";
 
@@ -16,21 +17,24 @@ type HeaderMenuLink = {
 };
 
 export const menuLinks: HeaderMenuLink[] = [
+  // 注释掉不需要的页面链接
+  // {
+  //   label: "Home",
+  //   href: "/",
+  // },
+  // {
+  //   label: "Debug Contracts",
+  //   href: "/debug",
+  //   icon: <BugAntIcon className="h-4 w-4" />,
+  // },
+
+  // 主要使用的页面
   {
     label: "Home",
-    href: "/",
-  },
-  {
-    label: "Debug Contracts",
-    href: "/debug",
-    icon: <BugAntIcon className="h-4 w-4" />,
-  },
-  {
-    label: "pageHome",
     href: "/pageHome",
   },
   {
-    label: "Crowdfund",
+    label: "crowdfunding",
     href: "/crowdfunding",
   },
 ];
